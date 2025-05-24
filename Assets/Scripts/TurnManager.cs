@@ -1,18 +1,28 @@
-/*
+using System.Collections;
 using UnityEngine;
 
 public class TurnManager : MonoBehaviour
 {
-    #region Constants
-    const int turn Activation
-    #endregion
+    [SerializeField] private PlayerController player;
+    [SerializeField] private EnemyAI enemy;
 
-    #region Notifications
-    public const string RoundBeganNotificaiton = "TurnManager.roundBegan";
-    #endregion
+    void Start()
+    {
+        StartCoroutine(GameLoop());
+    }
 
-    #region Public
+    private IEnumerator GameLoop()
+    {
+        while (true)
+        {
+            // —— PLAYER TURN ——
+            player.hasMoved = false;
+            yield return new WaitUntil(() => player.hasMoved);
 
-    #endregion
+            // —— ENEMY TURN ——
+            Debug.Log("TurnManager: starting enemy turn");
+            yield return StartCoroutine(enemy.TakeTurnCoroutine());
+            Debug.Log("TurnManager: enemy turn complete");
+        }
+    }
 }
-*/
