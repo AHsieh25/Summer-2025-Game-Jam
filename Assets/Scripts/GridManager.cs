@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class GridManager : MonoBehaviour
 {
+    [SerializeField] private int tileSize = 32;
+    public int TileSize => tileSize;
     public int width, height;
     public Tile tilePrefab;
     public Dictionary<Vector2Int, Node> grid = new Dictionary<Vector2Int, Node>();
@@ -10,6 +12,9 @@ public class GridManager : MonoBehaviour
     void Start()
     {
         GenerateGrid();
+
+        // Create come untraversable tiles
+        GenerateObstacles(count: 10, size: 4);
     }
 
     void GenerateGrid()
@@ -19,9 +24,10 @@ public class GridManager : MonoBehaviour
             for (int y = 0; y < height; y++)
             {
                 Vector2Int pos = new Vector2Int(x, y);
+                Vector3 worldPos = new Vector3(x * tileSize, y * tileSize, 0);
 
                 // Instantiate tile prefab
-                var tile = Instantiate(tilePrefab, new Vector3(x, y), Quaternion.identity);
+                var tile = Instantiate(tilePrefab, worldPos, Quaternion.identity);
                 tile.name = $"Tile {x},{y}";
 
                 tile.Init(pos); // Initialize tile with grid pos
@@ -39,65 +45,68 @@ public class GridManager : MonoBehaviour
 
             }
         }
-        // Create come untraversable tiles
-        GenerateObstacles(count: 10, size: 4);
     }
 
     void GenerateObstacles(int count, int size)
     {
-        HashSet<Vector2Int> blocked = new HashSet<Vector2Int>();
-
+        var blocked = new HashSet<Vector2Int>();
         int placed = 0;
-        int maxAttempts = 500;
+        int maxAttempt = 500;
 
-        while (placed < count && maxAttempts-- > 0)
+        while (placed < count && maxAttempt-- > 0)
         {
-            Vector2Int start = new Vector2Int(Random.Range(0, width), Random.Range(0, height));
+            // Pick a random **grid** start
+            Vector2Int start = new Vector2Int(
+                Random.Range(0, width),
+                Random.Range(0, height)
+            );
 
-            if (!IsAreaClear(start, blocked)) continue;
+            // Skip if buffer overlap
+            if (!IsAreaClear(start, blocked))
+                continue;
 
-            List<Vector2Int> shape = new List<Vector2Int> { start };
-            HashSet<Vector2Int> tempUsed = new HashSet<Vector2Int> { start };
-
+            // Build a connected shape of `size` tiles
+            var shape = new List<Vector2Int> { start };
+            var tempUsed = new HashSet<Vector2Int> { start };
             int tries = 0;
-            while (shape.Count < size && tries < 20)
+
+            while (shape.Count < size && tries++ < 20)
             {
                 Vector2Int from = shape[Random.Range(0, shape.Count)];
-                foreach (var dir in CardinalDirections().Shuffle())
+                foreach (var dir in CardinalDirections())
                 {
                     Vector2Int next = from + dir;
-                    if (!IsInBounds(next)) continue;
-                    if (tempUsed.Contains(next)) continue;
+                    if (!IsInBounds(next) || tempUsed.Contains(next))
+                        continue;
+                    if (!IsAreaClear(next, blocked))
+                        continue;
 
-                    if (IsAreaClear(next, blocked))
-                    {
-                        shape.Add(next);
-                        tempUsed.Add(next);
-                        break;
-                    }
+                    shape.Add(next);
+                    tempUsed.Add(next);
+                    break;
                 }
-                tries++;
             }
 
-            if (shape.Count < size) continue;
+            if (shape.Count < size)
+                continue; // failed to build full shape
 
-            // Reserve the shape and surrounding buffer
-            foreach (var tile in shape)
+            // Mark these grid positions as blocked and color their tiles
+            foreach (var gPos in shape)
             {
-                blocked.Add(tile);
-                Reserve3x3Around(tile, blocked);
+                blocked.Add(gPos);
+                Reserve3x3Around(gPos, blocked);
 
-                if (grid.TryGetValue(tile, out Node node))
-                {
+                // Update pathfinding node
+                if (grid.TryGetValue(gPos, out Node node))
                     node.IsWalkable = false;
 
-                    var obj = GetTileObjectAtPosition(tile);
-                    if (obj != null)
-                    {
-                        var sr = obj.GetComponent<SpriteRenderer>();
-                        if (sr != null)
-                            sr.color = Color.black;
-                    }
+                // Find the tile GameObject by name ("Tile x,y")
+                var obj = GameObject.Find($"Tile {gPos.x},{gPos.y}");
+                if (obj != null)
+                {
+                    var sr = obj.GetComponent<SpriteRenderer>();
+                    if (sr != null)
+                        sr.color = Color.black;
                 }
             }
 
@@ -105,21 +114,14 @@ public class GridManager : MonoBehaviour
         }
     }
 
-    bool IsInBounds(Vector2Int pos)
-    {
-        return pos.x >= 0 && pos.x < width && pos.y >= 0 && pos.y < height;
-    }
+    bool IsInBounds(Vector2Int p) =>
+        p.x >= 0 && p.x < width && p.y >= 0 && p.y < height;
 
-    List<Vector2Int> CardinalDirections()
+    List<Vector2Int> CardinalDirections() => new List<Vector2Int>
     {
-        return new List<Vector2Int>
-    {
-        new Vector2Int(0, 1),
-        new Vector2Int(1, 0),
-        new Vector2Int(0, -1),
-        new Vector2Int(-1, 0)
+        Vector2Int.up, Vector2Int.right,
+        Vector2Int.down, Vector2Int.left
     };
-    }
 
     bool IsAreaClear(Vector2Int center, HashSet<Vector2Int> blocked)
     {
@@ -159,8 +161,6 @@ public class GridManager : MonoBehaviour
         return null;
     }
 
-    public Node GetNode(Vector2Int position)
-    {
-        return grid.ContainsKey(position) ? grid[position] : null;
-    }
+    public Node GetNode(Vector2Int position) =>
+        grid.TryGetValue(position, out var node) ? node : null;
 }

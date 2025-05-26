@@ -11,11 +11,14 @@ public class EnemyAI : MonoBehaviour
     [SerializeField] private GridManager gridManager;
     [SerializeField] private Pathfinding pathfinding;
 
+    private int tileSize;
+
     void Awake()
     {
         mover = GetComponent<UnitMovement>();
         if (gridManager == null) gridManager = FindFirstObjectByType<GridManager>();
         if (pathfinding == null) pathfinding = FindFirstObjectByType<Pathfinding>();
+        tileSize = gridManager.TileSize;
     }
 
     public IEnumerator TakeTurnCoroutine()
@@ -23,8 +26,8 @@ public class EnemyAI : MonoBehaviour
 
         Debug.Log("EnemyAI: TakeTurnCoroutine ENTER");
         // Compute start/end
-        Vector2Int start = Vector2Int.RoundToInt(transform.position);
-        Vector2Int end = Vector2Int.RoundToInt(playerTransform.position);
+        Vector2Int start = Vector2Int.RoundToInt(transform.position / tileSize);
+        Vector2Int end = Vector2Int.RoundToInt(playerTransform.position / tileSize);
 
         List<Node> path = pathfinding.FindPath(start, end);
         if (path == null || path.Count == 0)

@@ -28,8 +28,12 @@ public class PlayerController : MonoBehaviour
         {
             Vector2 mousePos = Mouse.current.position.ReadValue();
             Vector3 worldPos = Camera.main.ScreenToWorldPoint(mousePos);
-            Vector2Int gridPos = new Vector2Int(Mathf.RoundToInt(worldPos.x), Mathf.RoundToInt(worldPos.y));
-            Vector2Int currentPos = new Vector2Int(Mathf.RoundToInt(transform.position.x), Mathf.RoundToInt(transform.position.y));
+
+            // Converts world position to grid position
+            int tileSize = gridManager.TileSize;
+
+            Vector2Int gridPos = new Vector2Int(Mathf.RoundToInt(worldPos.x / tileSize), Mathf.RoundToInt(worldPos.y / tileSize));
+            Vector2Int currentPos = new Vector2Int(Mathf.RoundToInt(transform.position.x / tileSize), Mathf.RoundToInt(transform.position.y / tileSize));
 
             List<Node> path = pathfinding.FindPath(currentPos, gridPos);
             if (path == null || path.Count == 0) return;
