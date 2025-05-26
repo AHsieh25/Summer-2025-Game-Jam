@@ -13,6 +13,8 @@ public class PlayerController : MonoBehaviour
 
     [HideInInspector] public bool hasMoved = false;
 
+    public PlayerMenu PlayerMenu;
+
     void Awake()
     {
         mover = GetComponent<UnitMovement>();
@@ -36,7 +38,19 @@ public class PlayerController : MonoBehaviour
             Vector2Int currentPos = new Vector2Int(Mathf.RoundToInt(transform.position.x / tileSize), Mathf.RoundToInt(transform.position.y / tileSize));
 
             List<Node> path = pathfinding.FindPath(currentPos, gridPos);
-            if (path == null || path.Count == 0) return;
+
+            if (path == null) return;
+
+            if (path.Count == 0 && !PlayerMenu.CheckVisible())
+            {
+                PlayerMenu.Setup();
+                return;
+            }
+
+            if (!PlayerMenu.CheckMoving())
+            {
+                return;
+            }
 
             if (path.Count > movementRange)
             {
@@ -44,6 +58,7 @@ public class PlayerController : MonoBehaviour
                 return;
             }
 
+            PlayerMenu.ChangeMoving();
             StartCoroutine(MoveAndSignal(path));
         }
     }
