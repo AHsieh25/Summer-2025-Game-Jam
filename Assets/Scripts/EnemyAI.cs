@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,6 +11,7 @@ public class EnemyAI : MonoBehaviour
     private UnitMovement mover;
     [SerializeField] private GridManager gridManager;
     [SerializeField] private Pathfinding pathfinding;
+    [SerializeField] private GameObject parent;
 
     private int tileSize;
 
@@ -23,6 +25,11 @@ public class EnemyAI : MonoBehaviour
 
     public IEnumerator TakeTurnCoroutine()
     {
+        foreach (Transform child in parent.transform)
+        {
+            playerTransform = findClosest(child);
+        }
+
         if (this == null) yield break;
 
         Debug.Log("EnemyAI: TakeTurnCoroutine ENTER");
@@ -88,5 +95,23 @@ public class EnemyAI : MonoBehaviour
             Debug.Log("EnemyAI: Adjacent after move, attacking");
             GetComponent<UnitCombat>()?.TryAttack(playerTransform.gameObject);
         }
+    }
+
+    Transform findClosest(Transform child)
+    {
+        Vector2Int start = Vector2Int.RoundToInt((Vector2)transform.position / tileSize);
+        Vector2Int playerGrid = Vector2Int.RoundToInt((Vector2)child.position / tileSize);
+        double newDistance = Math.Sqrt(Math.Pow((playerGrid.x - start.x), 2) + Math.Pow((playerGrid.y - start.y), 2));
+
+        start = Vector2Int.RoundToInt((Vector2)transform.position / tileSize);
+        playerGrid = Vector2Int.RoundToInt((Vector2)playerTransform.position / tileSize);
+        double oldDistance = Math.Sqrt(Math.Pow((playerGrid.x - start.x), 2) + Math.Pow((playerGrid.y - start.y), 2));
+
+        if (newDistance > oldDistance)
+        {
+            return playerTransform;
+        }
+        return child;
+
     }
 }

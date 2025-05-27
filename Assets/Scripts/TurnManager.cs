@@ -8,7 +8,6 @@ public class TurnManager : MonoBehaviour
     [SerializeField] private PlayerController player;
     [SerializeField] private PlayerController player1;
     [SerializeField] private PlayerController player2;
-    [SerializeField] private EnemyAI enemy;
     [SerializeField] private GameObject parent;
 
     public int player_actions = 3;
