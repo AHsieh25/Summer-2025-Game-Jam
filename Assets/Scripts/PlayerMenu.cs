@@ -1,49 +1,30 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.InputSystem;
-
 
 public class PlayerMenu : MonoBehaviour
 {
-
-    public bool Moving = false;
+    public bool Moving { get; set; }
+    public bool Attacking { get; set; }
 
     public void Setup()
     {
         gameObject.SetActive(true);
+        Moving = false;
+        Attacking = false;
     }
 
     public void MoveButton()
     {
-        gameObject.SetActive(false);
         Moving = true;
+        Attacking = false;
+        gameObject.SetActive(false);
     }
 
     public void AttackButton()
     {
-
-    }
-
-    public bool CheckVisible()
-    {
-        return gameObject.activeSelf;
-    }
-
-    public bool CheckMoving()
-    {
-        return Moving;
-    }
-
-    public void ChangeMoving()
-    {
-        Moving = !Moving;
+        Attacking = true;
+        Moving = false;
+        gameObject.SetActive(false);
     }
 }
-
-
-
-
-
-

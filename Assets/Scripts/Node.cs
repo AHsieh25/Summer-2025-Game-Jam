@@ -2,8 +2,9 @@ using UnityEngine;
 
 public class Node
 {
-    public Vector2 GridPosition;
+    public Vector2Int GridPosition;
     public bool IsWalkable;
+    public bool IsOccupied;
     public int GCost;
     public int HCost;
     public Node Parent;
@@ -14,5 +15,6 @@ public class Node
     {
         GridPosition = pos;
         IsWalkable = isWalkable;
+        IsOccupied = false;
     }
 }

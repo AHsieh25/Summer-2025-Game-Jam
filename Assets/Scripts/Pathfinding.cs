@@ -90,8 +90,9 @@ public class Pathfinding : MonoBehaviour
         {
             Vector2Int neighborPos = Vector2Int.RoundToInt(node.GridPosition + dir);
             Node neighbor = gridManager.GetNode(neighborPos);
-            if (neighbor != null)
-                neighbors.Add(neighbor);
+            if (neighbor == null) continue;
+            if (!neighbor.IsWalkable || neighbor.IsOccupied) continue;    
+            neighbors.Add(neighbor);
         }
 
         return neighbors;

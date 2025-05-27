@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class GridManager : MonoBehaviour
 {
-    [SerializeField] private int tileSize = 32;
+    [SerializeField] private int tileSize = 64;
     public int TileSize => tileSize;
     public int width, height;
     public Tile tilePrefab;
@@ -163,4 +163,11 @@ public class GridManager : MonoBehaviour
 
     public Node GetNode(Vector2Int position) =>
         grid.TryGetValue(position, out var node) ? node : null;
+
+    public void SetOccupied(Vector2Int gridPos, bool occupied)
+    {
+        var node = GetNode(gridPos);
+        if (node != null)
+            node.IsOccupied = occupied;
+    }
 }

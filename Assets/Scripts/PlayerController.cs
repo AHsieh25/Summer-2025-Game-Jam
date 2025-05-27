@@ -13,11 +13,17 @@ public class PlayerController : MonoBehaviour
 
     [HideInInspector] public bool hasMoved = false;
 
-    public PlayerMenu PlayerMenu;
+    public PlayerMenu playerMenu;
+
+    private TransformGridHelper gridHelper;
+    private UnitCombat combat;
 
     void Awake()
     {
         mover = GetComponent<UnitMovement>();
+        gridHelper = GetComponent<TransformGridHelper>();
+        combat = GetComponent<UnitCombat>();
+
         if (gridManager == null) gridManager = FindFirstObjectByType<GridManager>();
         if (pathfinding == null) pathfinding = FindFirstObjectByType<Pathfinding>();
     }
@@ -26,46 +32,79 @@ public class PlayerController : MonoBehaviour
     {
         if (mover.isMoving || hasMoved) return;
 
-        if (Mouse.current.leftButton.wasPressedThisFrame)
+        if (!Mouse.current.leftButton.wasPressedThisFrame) return;
+
+        Vector2 mousePos = Mouse.current.position.ReadValue();
+        Vector3 worldPos = Camera.main.ScreenToWorldPoint(mousePos);
+
+        // Converts world position to grid position
+        int tileSize = gridManager.TileSize;
+
+        Vector2Int gridPos = new Vector2Int(Mathf.RoundToInt(worldPos.x / tileSize), Mathf.RoundToInt(worldPos.y / tileSize));
+
+        if (!playerMenu.gameObject.activeSelf
+            && gridHelper.GridPosition == gridPos)
         {
-            Vector2 mousePos = Mouse.current.position.ReadValue();
-            Vector3 worldPos = Camera.main.ScreenToWorldPoint(mousePos);
+            playerMenu.Setup();
+            return;
+        }
 
-            // Converts world position to grid position
-            int tileSize = gridManager.TileSize;
+        // if menu is up but no action chosen, ignore clicks
+        if (playerMenu.gameObject.activeSelf)
+            return;
 
-            Vector2Int gridPos = new Vector2Int(Mathf.RoundToInt(worldPos.x / tileSize), Mathf.RoundToInt(worldPos.y / tileSize));
-            Vector2Int currentPos = new Vector2Int(Mathf.RoundToInt(transform.position.x / tileSize), Mathf.RoundToInt(transform.position.y / tileSize));
+        // --- MOVE MODE ---
+        if (playerMenu.Moving)
+        {
+            TryMove(gridPos);
+            return;
+        }
 
-            List<Node> path = pathfinding.FindPath(currentPos, gridPos);
-
-            if (path == null) return;
-
-            if (path.Count == 0 && !PlayerMenu.CheckVisible())
-            {
-                PlayerMenu.Setup();
-                return;
-            }
-
-            if (!PlayerMenu.CheckMoving())
-            {
-                return;
-            }
-
-            if (path.Count > movementRange)
-            {
-                Debug.Log($"Target too far: range {movementRange}, need {path.Count}.");
-                return;
-            }
-
-            PlayerMenu.ChangeMoving();
-            StartCoroutine(MoveAndSignal(path));
+        // --- ATTACK MODE ---
+        if (playerMenu.Attacking)
+        {
+            TryAttack(gridPos);
+            return;
         }
     }
 
-    private IEnumerator MoveAndSignal(List<Node> path)
+    private void TryMove(Vector2Int targetGrid)
+    {
+        Vector2Int startGrid = gridHelper.GridPosition;
+        var path = pathfinding.FindPath(startGrid, targetGrid);
+        if (path == null || path.Count == 0) return;
+        if (path.Count > movementRange)
+        {
+            Debug.Log($"Too far: need {path.Count}, have {movementRange}");
+            return;
+        }
+
+        // consume move
+        playerMenu.Moving = false;
+        StartCoroutine(MoveAndEndTurn(path));
+    }
+
+    private void TryAttack(Vector2Int targetGrid)
+    {
+        // find any enemy at that grid cell
+        foreach (var enemy in FindObjectsByType<EnemyAI>(FindObjectsSortMode.None))
+        {
+            var eHelper = enemy.GetComponent<TransformGridHelper>();
+            if (eHelper.GridPosition == targetGrid)
+            {
+                combat.TryAttack(enemy.gameObject);
+                hasMoved = true;
+                playerMenu.Attacking = false;
+                return;
+            }
+        }
+        Debug.Log("No enemy to attack there");
+    }
+
+    private IEnumerator MoveAndEndTurn(List<Node> path)
     {
         yield return StartCoroutine(mover.MoveAlongPath(path));
         hasMoved = true;
     }
+
 }

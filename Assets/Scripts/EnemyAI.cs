@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -23,23 +23,70 @@ public class EnemyAI : MonoBehaviour
 
     public IEnumerator TakeTurnCoroutine()
     {
+        if (this == null) yield break;
 
         Debug.Log("EnemyAI: TakeTurnCoroutine ENTER");
-        // Compute start/end
-        Vector2Int start = Vector2Int.RoundToInt(transform.position / tileSize);
-        Vector2Int end = Vector2Int.RoundToInt(playerTransform.position / tileSize);
 
-        List<Node> path = pathfinding.FindPath(start, end);
-        if (path == null || path.Count == 0)
+        // Convert world pos → grid coords
+        Vector2Int start = Vector2Int.RoundToInt((Vector2)transform.position / tileSize);
+        Vector2Int playerGrid = Vector2Int.RoundToInt((Vector2)playerTransform.position / tileSize);
+        Debug.Log($"EnemyAI: start={start}, playerAt={playerGrid}");
+
+        // If already adjacent, skip moving
+        if (Mathf.Abs(start.x - playerGrid.x) + Mathf.Abs(start.y - playerGrid.y) == 1)
         {
+            Debug.Log("EnemyAI: Already adjacent—skip move");
             yield break;
         }
 
-        // Limit movement range
-        int steps = Mathf.Min(movementRange, path.Count);
-        List<Node> limitPath = path.GetRange(0, steps);
+        // Examine each of the 4 neighbors around the player
+        Vector2Int[] dirs = {
+            Vector2Int.up, Vector2Int.right,
+            Vector2Int.down, Vector2Int.left
+        };
 
-        yield return StartCoroutine(mover.MoveAlongPath(limitPath));
-        // TO-DO: Add attack logic
+        List<Node> bestPath = null;
+        int bestLength = int.MaxValue;
+
+        foreach (var d in dirs)
+        {
+            Vector2Int target = playerGrid + d;
+            // must be in bounds, walkable, and not occupied
+            var node = gridManager.GetNode(target);
+            if (node == null || !node.IsWalkable || node.IsOccupied)
+                continue;
+
+            var path = pathfinding.FindPath(start, target);
+            if (path != null && path.Count > 0 && path.Count < bestLength)
+            {
+                bestPath = path;
+                bestLength = path.Count;
+            }
+        }
+
+        if (bestPath == null)
+        {
+            Debug.Log("EnemyAI: No reachable adjacent tile to player");
+            yield break;
+        }
+
+        Debug.Log($"EnemyAI: Best path to adjacent tile has {bestPath.Count} steps");
+
+        // Trim to movementRange
+        int steps = Mathf.Min(movementRange, bestPath.Count);
+        var limited = bestPath.GetRange(0, steps);
+
+        Debug.Log($"EnemyAI: moving {steps}/{bestPath.Count} tiles");
+        yield return StartCoroutine(mover.MoveAlongPath(limited));
+
+        Debug.Log("EnemyAI: MoveAlongPath complete");
+
+        // Optional: if you ended up adjacent, attack
+        Vector2Int endPos = Vector2Int.RoundToInt((Vector2)transform.position / tileSize);
+        if (Mathf.Abs(endPos.x - playerGrid.x) + Mathf.Abs(endPos.y - playerGrid.y) == 1)
+        {
+            Debug.Log("EnemyAI: Adjacent after move, attacking");
+            GetComponent<UnitCombat>()?.TryAttack(playerTransform.gameObject);
+        }
     }
 }
