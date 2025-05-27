@@ -32,6 +32,7 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        //Only continue if no other player character was clicked on and hasn't acted yet
         if (playerMenu.index != index && playerMenu.index != -1)
         {
             return;

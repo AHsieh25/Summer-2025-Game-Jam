@@ -25,6 +25,7 @@ public class EnemyAI : MonoBehaviour
 
     public IEnumerator TakeTurnCoroutine()
     {
+        //Find closest player to move towards
         foreach (Transform child in parent.transform)
         {
             playerTransform = findClosest(child);
