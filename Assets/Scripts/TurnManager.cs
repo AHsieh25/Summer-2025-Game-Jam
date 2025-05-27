@@ -1,4 +1,6 @@
 using System.Collections;
+using System.Collections.Generic;
+using System.Security.Cryptography;
 using UnityEngine;
 
 public class TurnManager : MonoBehaviour
@@ -7,6 +9,7 @@ public class TurnManager : MonoBehaviour
     [SerializeField] private PlayerController player1;
     [SerializeField] private PlayerController player2;
     [SerializeField] private EnemyAI enemy;
+    [SerializeField] private GameObject parent;
 
     public int player_actions = 3;
 
@@ -33,7 +36,10 @@ public class TurnManager : MonoBehaviour
 
             // —— ENEMY TURN ——
             Debug.Log("TurnManager: starting enemy turn");
-            yield return StartCoroutine(enemy.TakeTurnCoroutine());
+            foreach (Transform child in parent.transform)
+            {
+                yield return StartCoroutine(child.gameObject.GetComponent<EnemyAI>().TakeTurnCoroutine());
+            }
             Debug.Log("TurnManager: enemy turn complete");
         }
     }

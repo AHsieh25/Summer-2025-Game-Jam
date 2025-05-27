@@ -9,8 +9,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private int movementRange;
     private UnitMovement mover;
     [SerializeField] private GridManager gridManager;
-    //[SerializeField] private GridManager gridManager1;
-    //[SerializeField] private GridManager gridManager2;
     [SerializeField] private Pathfinding pathfinding;
 
     [HideInInspector] public bool hasMoved = false;
