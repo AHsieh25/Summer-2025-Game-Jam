@@ -6,9 +6,11 @@ public class PlayerMenu : MonoBehaviour
 {
     public bool Moving { get; set; }
     public bool Attacking { get; set; }
+    public int index = -1;
 
-    public void Setup()
+    public void Setup(int i)
     {
+        index = i;
         gameObject.SetActive(true);
         Moving = false;
         Attacking = false;

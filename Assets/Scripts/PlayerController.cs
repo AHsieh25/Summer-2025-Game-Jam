@@ -9,11 +9,15 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private int movementRange;
     private UnitMovement mover;
     [SerializeField] private GridManager gridManager;
+    //[SerializeField] private GridManager gridManager1;
+    //[SerializeField] private GridManager gridManager2;
     [SerializeField] private Pathfinding pathfinding;
 
     [HideInInspector] public bool hasMoved = false;
 
     public PlayerMenu playerMenu;
+
+    public int index;
 
     private TransformGridHelper gridHelper;
     private UnitCombat combat;
@@ -30,6 +34,11 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        if (playerMenu.index != index && playerMenu.index != -1)
+        {
+            return;
+        }
+
         if (mover.isMoving || hasMoved) return;
 
         if (!Mouse.current.leftButton.wasPressedThisFrame) return;
@@ -45,7 +54,7 @@ public class PlayerController : MonoBehaviour
         if (!playerMenu.gameObject.activeSelf
             && gridHelper.GridPosition == gridPos)
         {
-            playerMenu.Setup();
+            playerMenu.Setup(index);
             return;
         }
 
@@ -81,6 +90,7 @@ public class PlayerController : MonoBehaviour
 
         // consume move
         playerMenu.Moving = false;
+        playerMenu.index = -1;
         StartCoroutine(MoveAndEndTurn(path));
     }
 
@@ -95,6 +105,7 @@ public class PlayerController : MonoBehaviour
                 combat.TryAttack(enemy.gameObject);
                 hasMoved = true;
                 playerMenu.Attacking = false;
+                playerMenu.index = -1;
                 return;
             }
         }
