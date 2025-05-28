@@ -29,7 +29,7 @@ public class TextCreator : MonoBehaviour
         foreach (char c in transferText)
         {
             viewText.text += c;
-            yield return new WaitForSeconds(0.03f);
+            yield return new WaitForSeconds(0.05f);
         }
     }
 }
