@@ -1893,6 +1893,7 @@ MonoBehaviour:
   gridManager: {fileID: 2038246591}
   pathfinding: {fileID: 1482702313}
   hasMoved: 0
+  viewing: 0
   playerMenu: {fileID: 103720743}
   index: 0
   stats: {fileID: 1765959123}
@@ -2032,6 +2033,7 @@ MonoBehaviour:
   gridManager: {fileID: 2038246591}
   pathfinding: {fileID: 1482702313}
   hasMoved: 0
+  viewing: 0
   playerMenu: {fileID: 103720743}
   index: 0
   stats: {fileID: 1817453022}
@@ -2531,6 +2533,7 @@ MonoBehaviour:
   gridManager: {fileID: 2038246591}
   pathfinding: {fileID: 1482702313}
   hasMoved: 0
+  viewing: 0
   playerMenu: {fileID: 103720743}
   index: 0
   stats: {fileID: 2065757458}
