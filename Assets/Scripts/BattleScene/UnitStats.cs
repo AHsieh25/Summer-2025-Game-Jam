@@ -4,6 +4,7 @@ public class UnitStats : MonoBehaviour
 {
     [Tooltip("Reference to this unit’s data asset")]
     public UnitStatsData data;
+    [SerializeField] private TransformGridHelper gridHelper;
 
     [HideInInspector] public int currentHealth;
 
@@ -28,5 +29,7 @@ public class UnitStats : MonoBehaviour
         Debug.Log($"{gameObject.name} has died.");
         // Optional: play animation, disable unit, or destroy
         Destroy(gameObject); // or disable movement, remove from turn system, etc.
+        GridManager gridManager = FindFirstObjectByType<GridManager>();
+        gridManager.SetOccupied(gridHelper.GridPosition, false);
     }
 }

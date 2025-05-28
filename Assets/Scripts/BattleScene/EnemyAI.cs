@@ -12,6 +12,7 @@ public class EnemyAI : MonoBehaviour
     [SerializeField] private GridManager gridManager;
     [SerializeField] private Pathfinding pathfinding;
     [SerializeField] private GameObject parent;
+    [SerializeField] private TransformGridHelper gridHelper;
 
     private int tileSize;
 
@@ -43,7 +44,7 @@ public class EnemyAI : MonoBehaviour
         // If already adjacent, skip moving
         if (Mathf.Abs(start.x - playerGrid.x) + Mathf.Abs(start.y - playerGrid.y) == 1)
         {
-            Debug.Log("EnemyAI: Already adjacent—skip move");
+            tryAttack(playerGrid);
             yield break;
         }
 
@@ -90,8 +91,13 @@ public class EnemyAI : MonoBehaviour
         Debug.Log("EnemyAI: MoveAlongPath complete");
 
         // Optional: if you ended up adjacent, attack
-        Vector2Int endPos = Vector2Int.RoundToInt((Vector2)transform.position / tileSize);
-        if (Mathf.Abs(endPos.x - playerGrid.x) + Mathf.Abs(endPos.y - playerGrid.y) == 1)
+        //Vector2Int endPos = Vector2Int.RoundToInt((Vector2)transform.position / tileSize);
+        tryAttack(playerGrid);
+    }
+
+    void tryAttack(Vector2Int playerGrid)
+    {
+        if (Mathf.Abs(gridHelper.GridPosition.x - playerGrid.x) + Mathf.Abs(gridHelper.GridPosition.y - playerGrid.y) == 1)
         {
             Debug.Log("EnemyAI: Adjacent after move, attacking");
             GetComponent<UnitCombat>()?.TryAttack(playerTransform.gameObject);

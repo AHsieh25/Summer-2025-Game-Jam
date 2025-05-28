@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static UnityEngine.GraphicsBuffer;
 
 
 public class PlayerController : MonoBehaviour
@@ -16,6 +17,8 @@ public class PlayerController : MonoBehaviour
     public PlayerMenu playerMenu;
 
     public int index;
+
+    [SerializeField] private UnitStats stats;
 
     private TransformGridHelper gridHelper;
     private UnitCombat combat;
@@ -50,10 +53,28 @@ public class PlayerController : MonoBehaviour
 
         Vector2Int gridPos = new Vector2Int(Mathf.RoundToInt(worldPos.x / tileSize), Mathf.RoundToInt(worldPos.y / tileSize));
 
+        // Check if player is clicked on
         if (!playerMenu.gameObject.activeSelf
             && gridHelper.GridPosition == gridPos)
         {
-            playerMenu.Setup(index);
+            playerMenu.Setup(index, stats.data.attackPower, stats.data.moveDistance, stats.currentHealth, stats.data.maxHealth);
+            return;
+        }
+
+        // Check if enemy is clicked on
+        UnitStats targetStats = null;
+        foreach (var enemy in FindObjectsByType<EnemyAI>(FindObjectsSortMode.None))
+        {
+            var eHelper = enemy.GetComponent<TransformGridHelper>();
+            if (eHelper.GridPosition == gridPos)
+            {
+                targetStats = enemy.gameObject.GetComponent<UnitStats>();
+            }
+        }
+        if (!playerMenu.gameObject.activeSelf
+            && targetStats != null && playerMenu.index == -1)
+        {
+            playerMenu.EnemySetup(targetStats.currentHealth, targetStats.data.maxHealth);
             return;
         }
 

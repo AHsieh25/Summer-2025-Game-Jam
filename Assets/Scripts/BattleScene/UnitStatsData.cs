@@ -5,5 +5,6 @@ using UnityEngine;
 public class UnitStatsData : ScriptableObject
 {
     public int maxHealth = 10;
-    public int attackPower = 3;
+    public int attackPower = 25;
+    public int moveDistance = 7;
 }
