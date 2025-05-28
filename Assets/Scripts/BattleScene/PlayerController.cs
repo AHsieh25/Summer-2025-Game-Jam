@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using static UnityEngine.GraphicsBuffer;
@@ -13,6 +14,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Pathfinding pathfinding;
 
     [HideInInspector] public bool hasMoved = false;
+    public bool viewing = false;
 
     public PlayerMenu playerMenu;
 
@@ -36,6 +38,9 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         //Only continue if no other player character was clicked on and hasn't acted yet
+        if (!playerMenu.gameObject.activeSelf && !playerMenu.Moving && viewing)
+            viewMove(false);
+
         if (playerMenu.index != index && playerMenu.index != -1)
         {
             return;
@@ -58,11 +63,12 @@ public class PlayerController : MonoBehaviour
             && gridHelper.GridPosition == gridPos)
         {
             playerMenu.Setup(index, stats.data.attackPower, stats.data.moveDistance, stats.currentHealth, stats.data.maxHealth);
+            viewMove(true);
             return;
         }
 
-        // Check if enemy is clicked on
-        UnitStats targetStats = null;
+            // Check if enemy is clicked on
+            UnitStats targetStats = null;
         foreach (var enemy in FindObjectsByType<EnemyAI>(FindObjectsSortMode.None))
         {
             var eHelper = enemy.GetComponent<TransformGridHelper>();
@@ -111,6 +117,7 @@ public class PlayerController : MonoBehaviour
         // consume move
         playerMenu.Moving = false;
         playerMenu.index = -1;
+        viewMove(false);
         StartCoroutine(MoveAndEndTurn(path));
     }
 
@@ -138,4 +145,20 @@ public class PlayerController : MonoBehaviour
         hasMoved = true;
     }
 
+    private void viewMove(bool view)
+    {
+        for (int i = 0; i < 20; i++)
+        {
+            for (int j = 0; j < 20; j++)
+            {
+                var path = pathfinding.FindPath(gridHelper.GridPosition, new Vector2Int(i, j));
+                if (path == null || path.Count == 0) continue;
+                if (path.Count <= movementRange)
+                {
+                    gridManager.SetColor(new Vector2Int(i, j), view);
+                }
+            }
+        }
+        viewing = view;
+    }
 }

@@ -32,6 +32,14 @@ public class GridManager : MonoBehaviour
 
                 tile.Init(pos); // Initialize tile with grid pos
 
+                var tile2 = Instantiate(tilePrefab, worldPos, Quaternion.identity);
+                tile2.name = $"Tile2 {x},{y}";
+                tile2.transform.SetParent(tile.transform);
+                tile2.gameObject.SetActive(false);
+                var sr2 = tile.GetComponent<SpriteRenderer>();
+                sr2.color = new Color(0f, 0f, 255f);
+                tile2.transform.position = new Vector3(tile2.transform.position.x, tile2.transform.position.y, -2);
+
                 // Create random color for each tile
                 var sr = tile.GetComponent<SpriteRenderer>();
                 if (sr != null)
@@ -169,5 +177,12 @@ public class GridManager : MonoBehaviour
         var node = GetNode(gridPos);
         if (node != null)
             node.IsOccupied = occupied;
+    }
+
+    public void SetColor(Vector2Int gridPos, bool movable)
+    {
+        var tile = GetTileObjectAtPosition(gridPos);
+        if (tile != null)
+            tile.transform.GetChild(0).gameObject.SetActive(movable);
     }
 }
