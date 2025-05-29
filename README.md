@@ -1,2 +1,3 @@
 # TODO
-* Set correct spawns
+* Add new attack patterns
+* Add attack direction buttons
