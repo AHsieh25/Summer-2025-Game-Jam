@@ -16,6 +16,7 @@ public class GraveyardEvents : MonoBehaviour
     [SerializeField] GameObject mainTextObject;
     [SerializeField] GameObject nextButton;
     [SerializeField] int eventPos = 0;
+    [SerializeField] GameObject charName;
 
     void Update()
     {
@@ -29,12 +30,12 @@ public class GraveyardEvents : MonoBehaviour
 
     IEnumerator EventStarter()
     {
-        // event 0
+        // Event 0
 
         yield return new WaitForSeconds(2);
         fadeIn.SetActive(false);
         profileMunc.SetActive(true);
-        
+        yield return new WaitForSeconds(1);
         mainTextObject.SetActive(true);
         textToSpeak = "...Where am I?";
         textBox.GetComponent<TMPro.TMP_Text>().text = textToSpeak;
@@ -46,18 +47,28 @@ public class GraveyardEvents : MonoBehaviour
         yield return new WaitUntil(() => textLength == currentTextLength);
         yield return new WaitForSeconds(0.5f);
         nextButton.SetActive(true);
-
-        
+        eventPos = 1;
     }
 
     IEnumerator EventOne()
     {
+        // Event 1
         nextButton.SetActive(false);
-        textBox.SetActive(true);
-        yield return new WaitForSeconds(2);
+        profileMunc.SetActive(false);
         profileGravekeeper.SetActive(true);
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(1);
+        textBox.SetActive(true);
+        charName.GetComponent<TMPro.TMP_Text>().text = "Gravekeeper";
+        textToSpeak = "Good evening. It seems you have risen from the beyond.";
+        textBox.GetComponent<TMPro.TMP_Text>().text = textToSpeak;
+        currentTextLength = textToSpeak.Length;
+        TextCreator.runTextPrint = true;
         gravekeeperSound.Play();
+        yield return new WaitForSeconds(0.05f);
+        yield return new WaitForSeconds(1);
+        yield return new WaitUntil(() => textLength == currentTextLength);
+        yield return new WaitForSeconds(0.5f);
+        nextButton.SetActive(true);
     }
 
     public void NextButton()
