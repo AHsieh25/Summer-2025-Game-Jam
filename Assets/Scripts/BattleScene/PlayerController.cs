@@ -1,8 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
+using TMPro.EditorUtilities;
+using Unity.VisualScripting;
+using UnityEditor.PackageManager;
 using UnityEngine;
+using UnityEngine.Analytics;
 using UnityEngine.InputSystem;
+using static UnityEditor.Experimental.GraphView.GraphView;
 using static UnityEngine.GraphicsBuffer;
 
 
@@ -17,6 +24,7 @@ public class PlayerController : MonoBehaviour
     public bool viewing = false;
 
     public PlayerMenu playerMenu;
+    public AttackMenu attackMenu;
 
     public int index;
 
@@ -37,8 +45,14 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        //Only continue if no other player character was clicked on and hasn't acted yet
-        if (!playerMenu.gameObject.activeSelf && !playerMenu.Moving &&!playerMenu.Attacking && viewing)
+        if (playerMenu.Attacking && playerMenu.index == index)
+        {
+            TryAttack();
+            return;
+        }
+
+            //Only continue if no other player character was clicked on and hasn't acted yet
+            if (!playerMenu.gameObject.activeSelf && !playerMenu.Moving &&!playerMenu.Attacking && viewing)
             viewMove(false);
 
         if (playerMenu.index != index && playerMenu.index != -1)
@@ -96,11 +110,13 @@ public class PlayerController : MonoBehaviour
         }
 
         // --- ATTACK MODE ---
+        /*
         if (playerMenu.Attacking)
         {
             TryAttack(gridPos);
             return;
         }
+        */
     }
 
     private void TryMove(Vector2Int targetGrid)
@@ -121,15 +137,19 @@ public class PlayerController : MonoBehaviour
         StartCoroutine(MoveAndEndTurn(path));
     }
 
-    private void TryAttack(Vector2Int targetGrid)
+    private void TryAttack()
     {
+        attackMenu.Setup();
+        //wait for button press here
+
+        Vector2Int targetGrid = new Vector2Int(0, 0);
         foreach (Vector2Int v in stats.data.attackGrid)
         {
-            if (targetGrid.y > gridHelper.GridPosition.y)
+            if (attackMenu.up)
             {
                 targetGrid = gridHelper.GridPosition + v;
             }
-            else if (targetGrid.x > gridHelper.GridPosition.x)
+            else if (attackMenu.right)
             {
                 targetGrid = v;
                 int temp = targetGrid.x;
@@ -137,13 +157,13 @@ public class PlayerController : MonoBehaviour
                 targetGrid.y = temp;
                 targetGrid = gridHelper.GridPosition + targetGrid;
             }
-            else if (targetGrid.y < gridHelper.GridPosition.y)
+            else if (attackMenu.down)
             {
                 targetGrid = v;
                 targetGrid.y = targetGrid.y * -1;
                 targetGrid = gridHelper.GridPosition + targetGrid;
             }
-            else if (targetGrid.x < gridHelper.GridPosition.x)
+            else if (attackMenu.left)
             {
                 targetGrid = v;
                 int temp = targetGrid.x;
