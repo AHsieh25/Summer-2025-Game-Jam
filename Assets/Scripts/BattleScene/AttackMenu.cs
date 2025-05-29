@@ -9,6 +9,7 @@ public class AttackMenu : MonoBehaviour
     public bool left = false;
     public bool right = false;
     public bool done = false;
+    public bool back = false;
     [SerializeField] private Button upButton;
     [SerializeField] private Button downButton;
     [SerializeField] private Button rightButton;
@@ -20,7 +21,6 @@ public class AttackMenu : MonoBehaviour
         down = false;
         left = false;
         right = false;
-        done = false;
         gameObject.SetActive(true);
     }
     public void UpButton()
@@ -49,4 +49,10 @@ public class AttackMenu : MonoBehaviour
         done = true;
         gameObject.SetActive(false);
     }
+    public void BackButton()
+    {
+        back = true;
+        gameObject.SetActive(false);
+    }
+
 }

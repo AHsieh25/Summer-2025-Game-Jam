@@ -18,6 +18,10 @@ public class UnitStats : MonoBehaviour
     {
         attackGrid.Add(new Vector2Int(0, 1));
         attackGrid.Add(new Vector2Int(0, 2));
+        attackGrid.Add(new Vector2Int(0, 3));
+        attackGrid.Add(new Vector2Int(1, 2));
+        attackGrid.Add(new Vector2Int(-1, 2));
+
         data.attackGrid = attackGrid;
         data.maxHealth = maxHealth;
         data.attackPower = attackPower;

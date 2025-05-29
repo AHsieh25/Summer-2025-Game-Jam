@@ -22,6 +22,7 @@ public class PlayerController : MonoBehaviour
 
     [HideInInspector] public bool hasMoved = false;
     public bool viewing = false;
+    public bool attacking = false;
 
     public PlayerMenu playerMenu;
     public AttackMenu attackMenu;
@@ -47,6 +48,11 @@ public class PlayerController : MonoBehaviour
     {
         if (playerMenu.Attacking && playerMenu.index == index)
         {
+            if (!attacking)
+            {
+                attacking = true;
+                attackMenu.Setup();
+            }
             TryAttack();
             return;
         }
@@ -139,8 +145,18 @@ public class PlayerController : MonoBehaviour
 
     private void TryAttack()
     {
-        attackMenu.Setup();
-        //wait for button press here
+        if (attackMenu.back)
+        {
+            attackMenu.back = false;
+            playerMenu.Attacking = false;
+            attacking = false;
+            playerMenu.gameObject.SetActive(true);
+        }
+
+        if (!attackMenu.done)
+        {
+            return;
+        }
 
         Vector2Int targetGrid = new Vector2Int(0, 0);
         foreach (Vector2Int v in stats.data.attackGrid)
@@ -188,6 +204,8 @@ public class PlayerController : MonoBehaviour
         hasMoved = true;
         playerMenu.Attacking = false;
         playerMenu.index = -1;
+        attacking = false;
+        attackMenu.done = false;
     }
 
     private IEnumerator MoveAndEndTurn(List<Node> path)
