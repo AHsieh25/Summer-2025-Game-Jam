@@ -36,9 +36,17 @@ public class GridManager : MonoBehaviour
                 tile2.name = $"Tile2 {x},{y}";
                 tile2.transform.SetParent(tile.transform);
                 tile2.gameObject.SetActive(false);
-                var sr2 = tile.GetComponent<SpriteRenderer>();
-                sr2.color = new Color(0f, 0f, 255f);
+                var sr2 = tile2.GetComponent<SpriteRenderer>();
+                sr2.color = new Color(0f, 0f, 1f);
                 tile2.transform.position = new Vector3(tile2.transform.position.x, tile2.transform.position.y, -2);
+
+                var tile3 = Instantiate(tilePrefab, worldPos, Quaternion.identity);
+                tile3.name = $"Tile3 {x},{y}";
+                tile3.transform.SetParent(tile2.transform);
+                tile3.gameObject.SetActive(false);
+                var sr3 = tile3.GetComponent<SpriteRenderer>();
+                sr3.color = new Color(1f, 0f, 0f);
+                tile3.transform.position = new Vector3(tile3.transform.position.x, tile3.transform.position.y, -3);
 
                 // Create random color for each tile
                 var sr = tile.GetComponent<SpriteRenderer>();
@@ -101,6 +109,7 @@ public class GridManager : MonoBehaviour
             // Mark these grid positions as blocked and color their tiles
             foreach (var gPos in shape)
             {
+                if (gPos.y == 0 || gPos.y == 19) continue;
                 blocked.Add(gPos);
                 Reserve3x3Around(gPos, blocked);
 
@@ -184,5 +193,11 @@ public class GridManager : MonoBehaviour
         var tile = GetTileObjectAtPosition(gridPos);
         if (tile != null)
             tile.transform.GetChild(0).gameObject.SetActive(movable);
+    }
+    public void SetColor2(Vector2Int gridPos, bool movable)
+    {
+        var tile = GetTileObjectAtPosition(gridPos);
+        if (tile != null)
+            tile.transform.GetChild(0).GetChild(0).gameObject.SetActive(movable);
     }
 }

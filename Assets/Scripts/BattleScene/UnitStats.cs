@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class UnitStats : MonoBehaviour
@@ -7,9 +8,21 @@ public class UnitStats : MonoBehaviour
     [SerializeField] private TransformGridHelper gridHelper;
 
     [HideInInspector] public int currentHealth;
+    [SerializeField] public List<Vector2Int> attackGrid = new List<Vector2Int>();
+    [SerializeField] public int maxHealth = 10;
+    [SerializeField] public int attackPower = 25;
+    [SerializeField] public int moveDistance = 7;
+    [SerializeField] public int attackDistance = 1;
 
     void Awake()
     {
+        attackGrid.Add(new Vector2Int(0, 1));
+        attackGrid.Add(new Vector2Int(0, 2));
+        data.attackGrid = attackGrid;
+        data.maxHealth = maxHealth;
+        data.attackPower = attackPower;
+        data.moveDistance = moveDistance;
+        data.attackDistance = attackDistance;
         currentHealth = data.maxHealth;
     }
 

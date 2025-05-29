@@ -22,16 +22,20 @@ public class UnitCombat : MonoBehaviour
         UnitStats targetStats = target.GetComponent<UnitStats>();
         if (targetStats == null) return;
 
+        attackRange = stats.data.attackDistance;
+
         // Check Manhattan distance on grid
         Vector2Int me = stats.GetComponent<TransformGridHelper>().GridPosition;
         Vector2Int them = targetStats.GetComponent<TransformGridHelper>().GridPosition;
         int dist = Mathf.Abs(me.x - them.x) + Mathf.Abs(me.y - them.y);
 
+        /*
         if (dist > attackRange)
         {
             Debug.Log($"{name} attack failed: target out of range ({dist} > {attackRange})");
             return;
         }
+        */
 
         // Perform the attack
         Debug.Log($"{name} attacks {target.name} for {stats.data.attackPower} damage");

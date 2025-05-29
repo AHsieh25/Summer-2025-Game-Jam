@@ -38,7 +38,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         //Only continue if no other player character was clicked on and hasn't acted yet
-        if (!playerMenu.gameObject.activeSelf && !playerMenu.Moving && viewing)
+        if (!playerMenu.gameObject.activeSelf && !playerMenu.Moving &&!playerMenu.Attacking && viewing)
             viewMove(false);
 
         if (playerMenu.index != index && playerMenu.index != -1)
@@ -123,20 +123,51 @@ public class PlayerController : MonoBehaviour
 
     private void TryAttack(Vector2Int targetGrid)
     {
-        // find any enemy at that grid cell
-        foreach (var enemy in FindObjectsByType<EnemyAI>(FindObjectsSortMode.None))
+        foreach (Vector2Int v in stats.data.attackGrid)
         {
-            var eHelper = enemy.GetComponent<TransformGridHelper>();
-            if (eHelper.GridPosition == targetGrid)
+            if (targetGrid.y > gridHelper.GridPosition.y)
             {
-                combat.TryAttack(enemy.gameObject);
-                hasMoved = true;
-                playerMenu.Attacking = false;
-                playerMenu.index = -1;
-                return;
+                targetGrid = gridHelper.GridPosition + v;
             }
+            else if (targetGrid.x > gridHelper.GridPosition.x)
+            {
+                targetGrid = v;
+                int temp = targetGrid.x;
+                targetGrid.x = targetGrid.y;
+                targetGrid.y = temp;
+                targetGrid = gridHelper.GridPosition + targetGrid;
+            }
+            else if (targetGrid.y < gridHelper.GridPosition.y)
+            {
+                targetGrid = v;
+                targetGrid.y = targetGrid.y * -1;
+                targetGrid = gridHelper.GridPosition + targetGrid;
+            }
+            else if (targetGrid.x < gridHelper.GridPosition.x)
+            {
+                targetGrid = v;
+                int temp = targetGrid.x;
+                targetGrid.x = targetGrid.y;
+                targetGrid.y = temp;
+                targetGrid.x = targetGrid.x * -1;
+                targetGrid = gridHelper.GridPosition + targetGrid;
+            }
+
+            // find any enemy at that grid cell
+            foreach (var enemy in FindObjectsByType<EnemyAI>(FindObjectsSortMode.None))
+            {
+                var eHelper = enemy.GetComponent<TransformGridHelper>();
+                if (eHelper.GridPosition == targetGrid)
+                {
+                    combat.TryAttack(enemy.gameObject);
+                    continue;
+                }
+            }
+            //Debug.Log("No enemy to attack there");
         }
-        Debug.Log("No enemy to attack there");
+        hasMoved = true;
+        playerMenu.Attacking = false;
+        playerMenu.index = -1;
     }
 
     private IEnumerator MoveAndEndTurn(List<Node> path)
@@ -159,6 +190,37 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
+        viewAttack(view);
         viewing = view;
+    }
+
+    private void viewAttack(bool view)
+    {
+        Vector2Int targetGrid;
+        foreach (Vector2Int v in stats.data.attackGrid)
+        {
+            targetGrid = gridHelper.GridPosition + v;
+            gridManager.SetColor2(targetGrid, view);
+
+            targetGrid = v;
+            int temp = targetGrid.x;
+            targetGrid.x = targetGrid.y;
+            targetGrid.y = temp;
+            targetGrid = gridHelper.GridPosition + targetGrid;
+            gridManager.SetColor2(targetGrid, view);
+
+            targetGrid = v;
+            targetGrid.y = targetGrid.y * -1;
+            targetGrid = gridHelper.GridPosition + targetGrid;
+            gridManager.SetColor2(targetGrid, view);
+
+            targetGrid = v;
+            temp = targetGrid.x;
+            targetGrid.x = targetGrid.y;
+            targetGrid.y = temp;
+            targetGrid.x = targetGrid.x * -1;
+            targetGrid = gridHelper.GridPosition + targetGrid;
+            gridManager.SetColor2(targetGrid, view);
+        }
     }
 }
