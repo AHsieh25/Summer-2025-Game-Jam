@@ -1,3 +1,3 @@
 # TODO
-* Add new attack patterns
-* Add attack direction buttons
+* Potentially add weapon switching
+* Fix attack direction buttons
