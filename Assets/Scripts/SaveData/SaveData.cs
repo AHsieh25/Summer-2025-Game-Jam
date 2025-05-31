@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class SaveData : MonoBehaviour
 {
 
-    [SerializeField] private PlayerData playerData = new PlayerData();
+    [SerializeField] public PlayerData playerData = new PlayerData();
 
     public void SavePlayerData()
     {

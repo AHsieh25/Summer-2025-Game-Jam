@@ -13,12 +13,19 @@ public class TurnManager : MonoBehaviour
     [SerializeField] private GameObject parent;
     [SerializeField] private Text CurrentTurn;
     [SerializeField] private Text Actions;
-    public string sceneName;
+    private SaveData sd;
+    public string nextSceneName;
+    public string currentSceneName;
 
     public int player_actions = 3;
 
     void Start()
     {
+        sd = gameObject.AddComponent<SaveData>();
+
+        sd.playerData.scene = currentSceneName;
+        sd.SavePlayerData();
+
         player.index = 0;
         player1.index = 1;
         player2.index = 2;
@@ -59,7 +66,7 @@ public class TurnManager : MonoBehaviour
         if (GameObject.FindGameObjectsWithTag("Enemy").Length == 0)
         {
             Debug.Log("No enemies remaining");
-            SceneManager.LoadScene(sceneName);
+            SceneManager.LoadScene(nextSceneName);
         }
     }
 }
