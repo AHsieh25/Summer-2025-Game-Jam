@@ -1,61 +1,42 @@
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
+using System.Collections.Generic;
 
 public class Pathfinding : MonoBehaviour
 {
-    [SerializeField] private GridManager gridManager;
+    public Tilemap ground;
+    public Tilemap obstacle;
+    public GridManager gridManager;
 
-    void Awake()
+    public List<Vector2Int> FindPath(Vector2Int start, Vector2Int target)
     {
-        if (gridManager == null)
+        var openSet = new PriorityQueue<Vector2Int>();
+        var cameFrom = new Dictionary<Vector2Int, Vector2Int>();
+        var gScore = new Dictionary<Vector2Int, int>();
+
+        openSet.Enqueue(start, 0);
+        gScore[start] = 0;
+
+        while (openSet.Count > 0)
         {
-            gridManager = FindFirstObjectByType<GridManager>();
-        }
-    }
+            var current = openSet.Dequeue();
 
+            if (current == target)
+                return ReconstructPath(cameFrom, current);
 
-    public List<Node> FindPath(Vector2Int startPos, Vector2Int endPos)
-    {
-        Node startNode = gridManager.GetNode(startPos);
-        Node endNode = gridManager.GetNode(endPos);
-
-        List<Node> openList = new List<Node>();
-        HashSet<Node> closedList = new HashSet<Node>();
-
-        openList.Add(startNode);
-
-        while (openList.Count > 0)
-        {
-            Node currentNode = openList[0];
-            for (int i = 1; i < openList.Count; i++)
+            foreach (var neighbor in GetNeighbors(current))
             {
-                if (openList[i].FCost < currentNode.FCost ||
-                    (openList[i].FCost == currentNode.FCost && openList[i].HCost < currentNode.HCost))
-                {
-                    currentNode = openList[i];
-                }
-            }
-
-            openList.Remove(currentNode);
-            closedList.Add(currentNode);
-
-            if (currentNode == endNode)
-                return RetracePath(startNode, endNode);
-
-            foreach (Node neighbor in GetNeighbors(currentNode))
-            {
-                if (!neighbor.IsWalkable || closedList.Contains(neighbor))
+                if (!IsWalkable(neighbor))
                     continue;
 
-                int newMovementCost = currentNode.GCost + GetDistance(currentNode, neighbor);
-                if (newMovementCost < neighbor.GCost || !openList.Contains(neighbor))
-                {
-                    neighbor.GCost = newMovementCost;
-                    neighbor.HCost = GetDistance(neighbor, endNode);
-                    neighbor.Parent = currentNode;
+                int tentativeG = gScore[current] + 1;
 
-                    if (!openList.Contains(neighbor))
-                        openList.Add(neighbor);
+                if (!gScore.ContainsKey(neighbor) || tentativeG < gScore[neighbor])
+                {
+                    cameFrom[neighbor] = current;
+                    gScore[neighbor] = tentativeG;
+                    int fScore = tentativeG + Heuristic(neighbor, target);
+                    openSet.Enqueue(neighbor, fScore);
                 }
             }
         }
@@ -63,43 +44,71 @@ public class Pathfinding : MonoBehaviour
         return null;
     }
 
-    List<Node> RetracePath(Node start, Node end)
+    private List<Vector2Int> ReconstructPath(Dictionary<Vector2Int, Vector2Int> cameFrom, Vector2Int current)
     {
-        List<Node> path = new List<Node>();
-        Node current = end;
-
-        while (current != start)
+        var path = new List<Vector2Int> { current };
+        while (cameFrom.ContainsKey(current))
         {
-            path.Add(current);
-            current = current.Parent;
+            current = cameFrom[current];
+            path.Insert(0, current);
         }
-
-        path.Reverse();
         return path;
     }
 
-    List<Node> GetNeighbors(Node node)
+    private IEnumerable<Vector2Int> GetNeighbors(Vector2Int pos)
     {
-        List<Node> neighbors = new List<Node>();
-        Vector2Int[] directions = {
-            Vector2Int.up, Vector2Int.down,
-            Vector2Int.left, Vector2Int.right
-        };
-
-        foreach (var dir in directions)
+        return new[]
         {
-            Vector2Int neighborPos = Vector2Int.RoundToInt(node.GridPosition + dir);
-            Node neighbor = gridManager.GetNode(neighborPos);
-            if (neighbor == null) continue;
-            if (!neighbor.IsWalkable || neighbor.IsOccupied) continue;    
-            neighbors.Add(neighbor);
-        }
-
-        return neighbors;
+            pos + Vector2Int.up,
+            pos + Vector2Int.down,
+            pos + Vector2Int.left,
+            pos + Vector2Int.right
+        };
     }
 
-    int GetDistance(Node a, Node b)
+    // Manhattan distance
+    private int Heuristic(Vector2Int a, Vector2Int b)
     {
-        return (int)(Mathf.Abs(a.GridPosition.x - b.GridPosition.x) + Mathf.Abs(a.GridPosition.y - b.GridPosition.y));
+        return Mathf.Abs(a.x - b.x) + Mathf.Abs(a.y - b.y);
+    }
+
+    private bool IsWalkable(Vector2Int pos)
+    {
+        Vector3Int cell = new Vector3Int(pos.x, pos.y, 0);
+        if (!ground.HasTile(cell))
+            return false;
+        if (obstacle.HasTile(cell))
+            return false;
+        if (gridManager.IsOccupied(pos))
+            return false;
+        return true;
+    }
+
+
+    private class PriorityQueue<T>
+    {
+        private readonly List<(T item, int priority)> elements = new();
+
+        public int Count => elements.Count;
+
+        public void Enqueue(T item, int priority)
+        {
+            elements.Add((item, priority));
+        }
+
+        public T Dequeue()
+        {
+            int bestIndex = 0;
+            for (int i = 1; i < elements.Count; i++)
+            {
+                if (elements[i].priority < elements[bestIndex].priority)
+                {
+                    bestIndex = i;
+                }
+            }
+            T bestItem = elements[bestIndex].item;
+            elements.RemoveAt(bestIndex);
+            return bestItem;
+        }
     }
 }

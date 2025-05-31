@@ -24,8 +24,6 @@ public class PlayerMenu : MonoBehaviour
         Attacking = false;
         attackButton.gameObject.SetActive(true);
         moveButton.gameObject.SetActive(true);
-        Attack.text = weaponName + "Attack: " + (attack).ToString();
-        Move.text = "Move";// + (move).ToString();
         Health.text = "Health: " + (currentHealth).ToString() + "/" + (maxHealth).ToString();
     }
 

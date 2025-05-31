@@ -9,5 +9,4 @@ public class CurrentData : MonoBehaviour
 public class currentData
 {
     public UnitStats stats;
-    public TransformGridHelper helper;
 }

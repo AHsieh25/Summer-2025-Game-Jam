@@ -1,70 +1,63 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class UnitMovement : MonoBehaviour
 {
-    [Tooltip("Tiles per second (will be multiplied by tileSize)")]
     [SerializeField] private float tilesPerSecond = 3f;
 
-    public bool isMoving { get; private set; }
+    public bool isMoving { get; private set; } = false;
 
     private GridManager gridManager;
+    private Tilemap ground;
     private float unitsPerSecond;
 
     void Awake()
     {
-        // Find and cache GridManager
         gridManager = FindFirstObjectByType<GridManager>();
-        if (gridManager == null)
-            Debug.LogError("UnitMovement: No GridManager found in scene!", this);
-
-        // Compute world‐space speed
-        unitsPerSecond = tilesPerSecond * gridManager.TileSize;
+        ground = gridManager.ground;
+        float cellSize = ground.cellSize.x;
+        unitsPerSecond = tilesPerSecond * cellSize;
     }
 
-    public IEnumerator MoveAlongPath(List<Node> path)
+    void Start()
     {
-        if (gridManager == null)
+        Vector3Int startCell = ground.WorldToCell(transform.position);
+        Vector2Int startGrid = new Vector2Int(startCell.x, startCell.y);
+        gridManager.SetOccupied(startGrid, true);
+    }
+
+    public IEnumerator MoveAlongPath(List<Vector2Int> path)
+    {
+        if (gridManager == null || ground == null || path == null || path.Count == 0)
             yield break;
 
         isMoving = true;
 
-        foreach (var node in path)
+        foreach (Vector2Int gridPos in path)
         {
-            Vector2Int nextGrid = node.GridPosition;
+            Vector3Int currCell = ground.WorldToCell(transform.position);
+            Vector2Int currGrid = new Vector2Int(currCell.x, currCell.y);
+            gridManager.SetOccupied(currGrid, false);
 
-            // Free whatever tile you were on before
-            // We'll compute your current grid from your position:
-            Vector2Int currentGrid = new Vector2Int(
-                Mathf.RoundToInt(transform.position.x / gridManager.TileSize),
-                Mathf.RoundToInt(transform.position.y / gridManager.TileSize));
-            gridManager.SetOccupied(currentGrid, false);
+            Vector3Int nextCell = new Vector3Int(gridPos.x, gridPos.y, 0);
+            Vector3 worldTarget = ground.GetCellCenterWorld(nextCell);
 
-            // Compute world-space target
-            Vector3 target = new Vector3(
-                nextGrid.x * gridManager.TileSize,
-                nextGrid.y * gridManager.TileSize,
-                0f
-            );
-
-            // Slide towards it
-            while ((transform.position - target).sqrMagnitude > 0.01f)
+            while ((transform.position - worldTarget).sqrMagnitude > 0.001f)
             {
                 transform.position = Vector3.MoveTowards(
                     transform.position,
-                    target,
+                    worldTarget,
                     unitsPerSecond * Time.deltaTime
                 );
                 yield return null;
             }
-            // Snap exactly
-            transform.position = target;
 
-            // Mark the new tile occupied
-            gridManager.SetOccupied(nextGrid, true);
+            transform.position = worldTarget;
+
+            gridManager.SetOccupied(gridPos, true);
         }
-
         isMoving = false;
     }
 }

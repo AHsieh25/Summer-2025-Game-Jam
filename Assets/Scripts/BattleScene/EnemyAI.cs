@@ -1,71 +1,95 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class EnemyAI : MonoBehaviour
 {
-    public Transform playerTransform;
+    public GameObject parent;
 
     [SerializeField] private int movementRange = 5;
     private UnitMovement mover;
     [SerializeField] private GridManager gridManager;
     [SerializeField] private Pathfinding pathfinding;
-    [SerializeField] private GameObject parent;
-    [SerializeField] private TransformGridHelper gridHelper;
 
-    private int tileSize;
+    private Tilemap groundTilemap;
+    private Tilemap obstacleTilemap;
 
     void Awake()
     {
         mover = GetComponent<UnitMovement>();
-        if (gridManager == null) gridManager = FindFirstObjectByType<GridManager>();
-        if (pathfinding == null) pathfinding = FindFirstObjectByType<Pathfinding>();
-        tileSize = gridManager.TileSize;
+
+        if (gridManager == null)
+            gridManager = FindFirstObjectByType<GridManager>();
+
+        groundTilemap = gridManager.ground;
+        obstacleTilemap = gridManager.obstacles;
+
+        if (pathfinding == null)
+            pathfinding = FindFirstObjectByType<Pathfinding>();
     }
 
     public IEnumerator TakeTurnCoroutine()
     {
-        //Find closest player to move towards
+        Transform closestPlayer = null;
+        float bestDistSqr = float.MaxValue;
+
+        Vector3Int myCell = groundTilemap.WorldToCell(transform.position);
+        Vector2Int startGrid = new Vector2Int(myCell.x, myCell.y);
+
         foreach (Transform child in parent.transform)
         {
-            playerTransform = findClosest(child);
+            if (child == null) continue;
+
+            Vector3Int pCell = groundTilemap.WorldToCell(child.position);
+            Vector2Int pGrid = new Vector2Int(pCell.x, pCell.y);
+
+            float dx = pGrid.x - startGrid.x;
+            float dy = pGrid.y - startGrid.y;
+            float distSqr = dx * dx + dy * dy;
+
+            if (distSqr < bestDistSqr)
+            {
+                bestDistSqr = distSqr;
+                closestPlayer = child;
+            }
         }
 
-        if (this == null) yield break;
+        if (closestPlayer == null)
+            yield break;
 
-        Debug.Log("EnemyAI: TakeTurnCoroutine ENTER");
+        Vector3Int playerCell = groundTilemap.WorldToCell(closestPlayer.position);
+        Vector2Int playerGrid = new Vector2Int(playerCell.x, playerCell.y);
 
-        // Convert world pos → grid coords
-        Vector2Int start = Vector2Int.RoundToInt((Vector2)transform.position / tileSize);
-        Vector2Int playerGrid = Vector2Int.RoundToInt((Vector2)playerTransform.position / tileSize);
-        Debug.Log($"EnemyAI: start={start}, playerAt={playerGrid}");
-
-        // If already adjacent, skip moving
-        if (Mathf.Abs(start.x - playerGrid.x) + Mathf.Abs(start.y - playerGrid.y) == 1)
+        if (Mathf.Abs(startGrid.x - playerGrid.x) + Mathf.Abs(startGrid.y - playerGrid.y) == 1)
         {
-            tryAttack(playerGrid);
+            TryAttack(playerGrid);
             yield break;
         }
 
-        // Examine each of the 4 neighbors around the player
         Vector2Int[] dirs = {
             Vector2Int.up, Vector2Int.right,
             Vector2Int.down, Vector2Int.left
         };
 
-        List<Node> bestPath = null;
+        List<Vector2Int> bestPath = null;
         int bestLength = int.MaxValue;
 
         foreach (var d in dirs)
         {
             Vector2Int target = playerGrid + d;
-            // must be in bounds, walkable, and not occupied
-            var node = gridManager.GetNode(target);
-            if (node == null || !node.IsWalkable || node.IsOccupied)
+
+            Vector3Int tCell = new Vector3Int(target.x, target.y, 0);
+            if (!groundTilemap.HasTile(tCell))
                 continue;
 
-            var path = pathfinding.FindPath(start, target);
+            if (obstacleTilemap.HasTile(tCell))
+                continue;
+
+            if (gridManager.IsOccupied(target))
+                continue;
+
+            List<Vector2Int> path = pathfinding.FindPath(startGrid, target);
             if (path != null && path.Count > 0 && path.Count < bestLength)
             {
                 bestPath = path;
@@ -75,50 +99,59 @@ public class EnemyAI : MonoBehaviour
 
         if (bestPath == null)
         {
-            Debug.Log("EnemyAI: No reachable adjacent tile to player");
             yield break;
         }
 
-        Debug.Log($"EnemyAI: Best path to adjacent tile has {bestPath.Count} steps");
-
-        // Trim to movementRange
         int steps = Mathf.Min(movementRange, bestPath.Count);
-        var limited = bestPath.GetRange(0, steps);
+        List<Vector2Int> limitedPath = bestPath.GetRange(0, steps);
 
-        Debug.Log($"EnemyAI: moving {steps}/{bestPath.Count} tiles");
-        yield return StartCoroutine(mover.MoveAlongPath(limited));
+        yield return StartCoroutine(mover.MoveAlongPath(limitedPath));
 
-        Debug.Log("EnemyAI: MoveAlongPath complete");
+        Vector3Int newCell = groundTilemap.WorldToCell(transform.position);
+        Vector2Int newGrid = new Vector2Int(newCell.x, newCell.y);
 
-        // Optional: if you ended up adjacent, attack
-        //Vector2Int endPos = Vector2Int.RoundToInt((Vector2)transform.position / tileSize);
-        tryAttack(playerGrid);
-    }
-
-    void tryAttack(Vector2Int playerGrid)
-    {
-        if (Mathf.Abs(gridHelper.GridPosition.x - playerGrid.x) + Mathf.Abs(gridHelper.GridPosition.y - playerGrid.y) == 1)
+        if (Mathf.Abs(newGrid.x - playerGrid.x) + Mathf.Abs(newGrid.y - playerGrid.y) == 1)
         {
-            Debug.Log("EnemyAI: Adjacent after move, attacking");
-            GetComponent<UnitCombat>()?.TryAttack(playerTransform.gameObject);
+            TryAttack(playerGrid);
         }
     }
 
-    Transform findClosest(Transform child)
+    private void TryAttack(Vector2Int playerGrid)
     {
-        Vector2Int start = Vector2Int.RoundToInt((Vector2)transform.position / tileSize);
-        Vector2Int playerGrid = Vector2Int.RoundToInt((Vector2)child.position / tileSize);
-        double newDistance = Math.Sqrt(Math.Pow((playerGrid.x - start.x), 2) + Math.Pow((playerGrid.y - start.y), 2));
-
-        start = Vector2Int.RoundToInt((Vector2)transform.position / tileSize);
-        playerGrid = Vector2Int.RoundToInt((Vector2)playerTransform.position / tileSize);
-        double oldDistance = Math.Sqrt(Math.Pow((playerGrid.x - start.x), 2) + Math.Pow((playerGrid.y - start.y), 2));
-
-        if (newDistance > oldDistance)
+        Vector3Int myCell = groundTilemap.WorldToCell(transform.position);
+        Vector2Int myGrid = new Vector2Int(myCell.x, myCell.y);
+        if (Mathf.Abs(myGrid.x - playerGrid.x) + Mathf.Abs(myGrid.y - playerGrid.y) == 1)
         {
-            return playerTransform;
+            GetComponent<UnitCombat>()?.TryAttack(FindClosestPlayerGameObject().gameObject);
         }
-        return child;
+    }
 
+    private Transform FindClosestPlayerGameObject()
+    {
+        Transform closest = null;
+        float bestDistSqr = float.MaxValue;
+
+        Vector3Int myCell = groundTilemap.WorldToCell(transform.position);
+        Vector2Int startGrid = new Vector2Int(myCell.x, myCell.y);
+
+        foreach (Transform child in parent.transform)
+        {
+            if (child == null) continue;
+
+            Vector3Int pCell = groundTilemap.WorldToCell(child.position);
+            Vector2Int pGrid = new Vector2Int(pCell.x, pCell.y);
+
+            float dx = pGrid.x - startGrid.x;
+            float dy = pGrid.y - startGrid.y;
+            float distSqr = dx * dx + dy * dy;
+
+            if (distSqr < bestDistSqr)
+            {
+                bestDistSqr = distSqr;
+                closest = child;
+            }
+        }
+
+        return closest;
     }
 }
