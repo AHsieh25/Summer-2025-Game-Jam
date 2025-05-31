@@ -7,26 +7,24 @@ public class SaveData : MonoBehaviour
 {
 
     [SerializeField] private PlayerData playerData = new PlayerData();
-    [SerializeField] string weapon;
-    [SerializeField] string scene;
 
     public void SavePlayerData()
     {
-        string data = JsonUtility.ToJson(playerData, true);
+        string data = JsonUtility.ToJson(playerData);
         System.IO.File.WriteAllText(Application.persistentDataPath + "/SaveData.json", data);
 
     }
 
     public void LoadPlayerData()
     {
-        string weaponToLoad = weapon;
-        string sceneToLoad = scene;
+        string data = System.IO.File.ReadAllText(Application.persistentDataPath + "/SaveData.json");
+        playerData = JsonUtility.FromJson<PlayerData>(data);
     }
 }
 
 [System.Serializable]
 public class PlayerData
 {
-    public string currentWeapon;
-    public string currentScene;
+    public string weapon;
+    public string scene;
 }

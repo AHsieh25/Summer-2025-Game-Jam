@@ -2775,6 +2775,7 @@ GameObject:
   - component: {fileID: 1817453022}
   - component: {fileID: 1817453023}
   - component: {fileID: 1817453024}
+  - component: {fileID: 1817453025}
   m_Layer: 0
   m_Name: Munc
   m_TagString: Untagged
@@ -2933,6 +2934,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackRange: 5
+--- !u!114 &1817453025
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1817453017}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a45843698a6c7b2468652aff8ee75821, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerData:
+    weapon: 1
+    scene: 1
 --- !u!1 &1830900777
 GameObject:
   m_ObjectHideFlags: 0
