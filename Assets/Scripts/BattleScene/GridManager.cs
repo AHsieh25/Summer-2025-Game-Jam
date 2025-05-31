@@ -4,6 +4,8 @@ using UnityEngine;
 public class GridManager : MonoBehaviour
 {
     [SerializeField] private int tileSize = 32;
+    [SerializeField] private Canvas canvas;
+
     public int TileSize => tileSize;
     public int width, height;
     public Tile tilePrefab;
@@ -26,7 +28,7 @@ public class GridManager : MonoBehaviour
             for (int y = 0; y < height; y++)
             {
                 Vector2Int pos = new Vector2Int(x, y);
-                Vector3 worldPos = new Vector3(x * tileSize, y * tileSize, 0);
+                Vector3 worldPos = new Vector3((canvas.transform.right.x - canvas.transform.position.x) + (x * tileSize), (canvas.transform.up.y - canvas.transform.position.y) + (y * tileSize), 0);
 
                 // Instantiate tile prefab
                 var tile = Instantiate(tilePrefab, worldPos, Quaternion.identity);
@@ -186,7 +188,7 @@ public class GridManager : MonoBehaviour
             }
             else
             {
-                tile.GetComponent<SpriteRenderer>().color = new Color(0f, 0f, 0f, 1f);
+                tile.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 1f);
             }
         }
     }
@@ -201,7 +203,7 @@ public class GridManager : MonoBehaviour
             }
             else
             {
-                tile.GetComponent<SpriteRenderer>().color = new Color(0f, 0f, 0f, 1f);
+                tile.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 1f);
             }
         }
     }
