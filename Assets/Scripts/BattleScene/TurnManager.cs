@@ -34,6 +34,7 @@ public class TurnManager : MonoBehaviour
             CurrentTurn.text = "Player Turn";
             for (int i = 0; i < player_actions; i++)
             {
+                changeScene();
                 Actions.text = "Actions: " + (player_actions - i).ToString();
                 player.hasMoved = false;
                 player1.hasMoved = false;
@@ -41,7 +42,6 @@ public class TurnManager : MonoBehaviour
                 yield return new WaitUntil(() => player.hasMoved || player1.hasMoved || player2.hasMoved);
             }
             Actions.text = "Actions: 0";
-            changeScene();
 
             // —— ENEMY TURN ——
             CurrentTurn.text = "Enemy Turn";
