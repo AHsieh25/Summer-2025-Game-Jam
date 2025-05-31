@@ -2791,8 +2791,8 @@ Transform:
   m_GameObject: {fileID: 1817453017}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -135.43555, y: -155.4022, z: 0}
-  m_LocalScale: {x: 16, y: 16, z: 1}
+  m_LocalPosition: {x: -135.39, y: -165.1, z: 0}
+  m_LocalScale: {x: 128, y: 128, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1166737503}
@@ -2876,8 +2876,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 10
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0, g: 0.7319051, b: 0.8867924, a: 1}
+  m_Sprite: {fileID: 3845494801405601191, guid: b2a06cd33ad1ba546ae1ff45b5e2c6e4, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -3546,7 +3546,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a140d2f835effd4eb78a86ef24fcb3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tileSize: 16
+  tileSize: 32
   width: 20
   height: 20
   tilePrefab: {fileID: 8834540508357678373, guid: 50672289c76391948a8b5e9c2e275a33, type: 3}

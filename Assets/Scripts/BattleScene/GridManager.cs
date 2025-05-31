@@ -3,14 +3,16 @@ using UnityEngine;
 
 public class GridManager : MonoBehaviour
 {
-    [SerializeField] private int tileSize = 64;
+    [SerializeField] private int tileSize = 32;
     public int TileSize => tileSize;
     public int width, height;
     public Tile tilePrefab;
     public Dictionary<Vector2Int, Node> grid = new Dictionary<Vector2Int, Node>();
+    Sprite[] sprites;
 
     void Start()
     {
+        sprites = Resources.LoadAll<Sprite>("Tiles");
         GenerateGrid();
 
         // Create come untraversable tiles
@@ -32,28 +34,13 @@ public class GridManager : MonoBehaviour
 
                 tile.Init(pos); // Initialize tile with grid pos
 
-                var tile2 = Instantiate(tilePrefab, worldPos, Quaternion.identity);
-                tile2.name = $"Tile2 {x},{y}";
-                tile2.transform.SetParent(tile.transform);
-                tile2.gameObject.SetActive(false);
-                var sr2 = tile2.GetComponent<SpriteRenderer>();
-                sr2.color = new Color(0f, 0f, 1f);
-                tile2.transform.position = new Vector3(tile2.transform.position.x, tile2.transform.position.y, -2);
-
-                var tile3 = Instantiate(tilePrefab, worldPos, Quaternion.identity);
-                tile3.name = $"Tile3 {x},{y}";
-                tile3.transform.SetParent(tile2.transform);
-                tile3.gameObject.SetActive(false);
-                var sr3 = tile3.GetComponent<SpriteRenderer>();
-                sr3.color = new Color(1f, 0f, 0f);
-                tile3.transform.position = new Vector3(tile3.transform.position.x, tile3.transform.position.y, -3);
-
                 // Create random color for each tile
                 var sr = tile.GetComponent<SpriteRenderer>();
                 if (sr != null)
                 {
                     // Assign a random color
-                    sr.color = new Color(0f, Random.Range(.5f, 1f), 0f);
+                    sr.sprite = sprites[Random.Range(0, sprites.Length)];
+                    sr.transform.localScale = new Vector3(100, 100, 1);
                 }
 
                 // All tiles traversable by default
@@ -192,12 +179,30 @@ public class GridManager : MonoBehaviour
     {
         var tile = GetTileObjectAtPosition(gridPos);
         if (tile != null)
-            tile.transform.GetChild(0).gameObject.SetActive(movable);
+        {
+            if (movable)
+            {
+                tile.GetComponent<SpriteRenderer>().color = new Color(0f, 0f, 1f);
+            }
+            else
+            {
+                tile.GetComponent<SpriteRenderer>().color = new Color(0f, 0f, 0f, 1f);
+            }
+        }
     }
     public void SetColor2(Vector2Int gridPos, bool movable)
     {
         var tile = GetTileObjectAtPosition(gridPos);
         if (tile != null)
-            tile.transform.GetChild(0).GetChild(0).gameObject.SetActive(movable);
+        {
+            if (movable)
+            {
+                tile.GetComponent<SpriteRenderer>().color = new Color(1f, 0f, 0f);
+            }
+            else
+            {
+                tile.GetComponent<SpriteRenderer>().color = new Color(0f, 0f, 0f, 1f);
+            }
+        }
     }
 }
