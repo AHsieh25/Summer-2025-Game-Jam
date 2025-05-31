@@ -27,26 +27,41 @@ public class UnitCombat : MonoBehaviour
         if (targetStats == null)
             return;
 
-        int attackRange = stats.attackDistance;
         int attackPower = stats.attackPower;
 
         Vector3Int myCell3D = groundTilemap.WorldToCell(transform.position);
         Vector2Int myGrid = new Vector2Int(myCell3D.x, myCell3D.y);
 
-        Vector3Int theirCell3D = groundTilemap.WorldToCell(target.transform.position);
-        Vector2Int theirGrid = new Vector2Int(theirCell3D.x, theirCell3D.y);
+        Vector3Int eCell3D = groundTilemap.WorldToCell(target.transform.position);
+        Vector2Int eGrid = new Vector2Int(eCell3D.x, eCell3D.y);
 
-        int dist = Mathf.Abs(myGrid.x - theirGrid.x) + Mathf.Abs(myGrid.y - theirGrid.y);
+        Vector2Int diff = new Vector2Int(eGrid.x - myGrid.x, eGrid.y - myGrid.y);
 
-        Debug.Log($"{name} attempts attack on {target.name}: dist={dist}, range={attackRange}, power={attackPower}");
+        bool canHit = false;
 
-        if (dist > attackRange)
+        if (stats.attackGrid != null && stats.attackGrid.Count > 0)
         {
-            Debug.Log($"{name} attack failed: target out of range ({dist} > {attackRange})");
+            if (stats.attackGrid.Contains(diff))
+            {
+                canHit = true;
+            }
+        }
+        else
+        {
+            // Enemy default
+            int dist = Mathf.Abs(diff.x) + Mathf.Abs(diff.y);
+            if (dist == 1)
+            {
+                canHit = true;
+            }
+        }
+        Debug.Log($"{name} attacks {target.name} for {attackPower} damage");
+        if (!canHit)
+        {
+            Debug.Log($"{name} attack failed: target not in valid attackGrid or adjacency.");
             return;
         }
 
-        Debug.Log($"{name} attacks {target.name} for {attackPower} damage");
         targetStats.TakeDamage(attackPower);
     }
 }

@@ -172,7 +172,6 @@ public class PlayerController : MonoBehaviour
             Vector2Int targetCell = unitGrid + targetGrid;
             Debug.Log("ug: " + unitGrid + "tg: " + targetGrid + " = " + targetCell);
             targetCells.Add(targetCell);
-            gridManager.SetGroundTileColor(targetCell, new Color(0f, 0f, 0f));
         }
         Debug.Log(targetCells.Count);
         Debug.Log(String.Join("\n", targetCells));
@@ -237,29 +236,21 @@ public class PlayerController : MonoBehaviour
     {
         gridManager.ResetAllGroundTileColors();
 
-        Vector3Int myCell = gridManager.ground.WorldToCell(transform.position);
-        Vector2Int myGrid = new Vector2Int(myCell.x, myCell.y);
+        Vector3Int myCell3D = gridManager.ground.WorldToCell(transform.position);
+        Vector2Int unitGrid = new Vector2Int(myCell3D.x, myCell3D.y);
 
-        BoundsInt bounds = gridManager.ground.cellBounds;
-        for (int x = bounds.xMin; x < bounds.xMax; x++)
+        List<Vector2Int> targetCells = new List<Vector2Int>();
+        Vector2Int targetGrid = Vector2Int.zero;
+        foreach (Vector2Int v in stats.attackGrid)
         {
-            for (int y = bounds.yMin; y < bounds.yMax; y++)
-            {
-                Vector2Int cell = new Vector2Int(x, y);
-
-                Vector3Int cell3 = new Vector3Int(x, y, 0);
-                if (!gridManager.ground.HasTile(cell3))
-                    continue;
-
-                List<Vector2Int> path = pathfinding.FindPath(myGrid, cell);
-                if (path == null || path.Count == 0)
-                    continue;
-
-                if (path.Count <= attackRange || gridManager.IsOccupied(cell))
-                {
-                    gridManager.SetGroundTileColor(cell, new Color(1f, 0f, 0f));
-                }
-            }
+            targetGrid = v;
+            gridManager.SetGroundTileColor(unitGrid + targetGrid, new Color(1f, 0f, 0f));
+            targetGrid = new Vector2Int(v.y, -v.x);
+            gridManager.SetGroundTileColor(unitGrid + targetGrid, new Color(1f, 0f, 0f));
+            targetGrid = new Vector2Int(-v.x, -v.y);
+            gridManager.SetGroundTileColor(unitGrid + targetGrid, new Color(1f, 0f, 0f));
+            targetGrid = new Vector2Int(-v.y, v.x);
+            gridManager.SetGroundTileColor(unitGrid + targetGrid, new Color(1f, 0f, 0f));
         }
     }
 }

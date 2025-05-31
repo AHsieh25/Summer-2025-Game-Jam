@@ -1,15 +1,10 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Tilemaps;
 
 public class UnitStats : MonoBehaviour
 {
-    [Header("ScriptableObject Data")]
-    [Tooltip("Reference to this unit’s data asset")]
     public UnitStatsData data;
 
-    [Header("Weapon & Grid Info")]
-    [Tooltip("If this unit uses weapons (e.g. the player), set to true")]
     [SerializeField] private bool isMunc = false;
 
     [HideInInspector] public int currentHealth;
