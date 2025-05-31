@@ -238,7 +238,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startButton: {fileID: 1928272132}
   quitButton: {fileID: 1848997878}
-  sceneName: BattleScene
 --- !u!1 &614975021
 GameObject:
   m_ObjectHideFlags: 0
@@ -376,7 +375,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_Font: {fileID: 12800000, guid: 4160b794d969796448b940dd7812b779, type: 3}
     m_FontSize: 14
     m_FontStyle: 0
     m_BestFit: 0
@@ -593,8 +592,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Munc Game
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: ba067c03d1025a540abc174f5bbba037, type: 2}
+  m_sharedMaterial: {fileID: 7386203780250580413, guid: ba067c03d1025a540abc174f5bbba037, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -861,7 +860,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_Font: {fileID: 12800000, guid: 4160b794d969796448b940dd7812b779, type: 3}
     m_FontSize: 14
     m_FontStyle: 0
     m_BestFit: 0

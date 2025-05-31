@@ -32,6 +32,9 @@ public class DialogueManager : MonoBehaviour
     private Story story;
     private bool dialoguePlaying = false;
 
+    [SerializeField] private SaveData sd;
+    public string currentSceneName;
+
     private void Update()
     {
         textLength = TextCreator.charCount;
@@ -39,6 +42,8 @@ public class DialogueManager : MonoBehaviour
 
     void Awake()
     {
+        sd.playerData.scene = currentSceneName;
+        sd.SavePlayerData();
         profileImage = muncProfile;
         audioSource = muncSound;
         story = new Story(inkJSON.text);

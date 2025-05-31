@@ -16,7 +16,7 @@ public class PlayerMenu : MonoBehaviour
     [SerializeField] private Button attackButton;
     [SerializeField] private Button moveButton;
 
-    public void Setup(int i, int attack, int move, int currentHealth, int maxHealth)
+    public void Setup(int i, int attack, int move, int currentHealth, int maxHealth, string weaponName)
     {
         index = i;
         gameObject.SetActive(true);
@@ -24,8 +24,8 @@ public class PlayerMenu : MonoBehaviour
         Attacking = false;
         attackButton.gameObject.SetActive(true);
         moveButton.gameObject.SetActive(true);
-        Attack.text = "Attack: " + (attack).ToString();
-        Move.text = "Move: " + (move).ToString();
+        Attack.text = weaponName + "Attack: " + (attack).ToString();
+        Move.text = "Move";// + (move).ToString();
         Health.text = "Health: " + (currentHealth).ToString() + "/" + (maxHealth).ToString();
     }
 

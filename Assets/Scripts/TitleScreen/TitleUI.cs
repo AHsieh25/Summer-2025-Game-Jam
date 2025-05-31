@@ -7,11 +7,13 @@ public class TitleUI : MonoBehaviour
 {
     [SerializeField] private Button startButton;
     [SerializeField] private Button quitButton;
-    [SerializeField] private string sceneName;
+    private SaveData sd;
 
     public void StartButton()
     {
-        SceneManager.LoadScene(sceneName);
+        sd = gameObject.AddComponent<SaveData>();
+        sd.LoadPlayerData();
+        SceneManager.LoadScene(sd.playerData.scene);
     }
 
     public void QuitButton()

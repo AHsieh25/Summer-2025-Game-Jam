@@ -11,5 +11,4 @@ public class UnitStatsData : ScriptableObject
     public int moveDistance = 7;
     public int attackDistance = 1;
     public List<Vector2Int> attackGrid = new List<Vector2Int>();
-
 }

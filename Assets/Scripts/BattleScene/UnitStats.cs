@@ -13,14 +13,52 @@ public class UnitStats : MonoBehaviour
     [SerializeField] public int attackPower = 25;
     [SerializeField] public int moveDistance = 7;
     [SerializeField] public int attackDistance = 1;
+    [SerializeField] public bool isMunc;
+    private SaveData sd;
+    private int weaponType;
+    public string weaponName = "";
 
     void Awake()
     {
-        attackGrid.Add(new Vector2Int(0, 1));
-        attackGrid.Add(new Vector2Int(0, 2));
-        attackGrid.Add(new Vector2Int(0, 3));
-        attackGrid.Add(new Vector2Int(1, 2));
-        attackGrid.Add(new Vector2Int(-1, 2));
+        sd = gameObject.AddComponent<SaveData>();
+        if (isMunc)
+        {
+            sd.LoadPlayerData();
+            weaponType = int.Parse(sd.playerData.weapon);
+
+            switch(weaponType)
+            {
+                case 0:
+                    attackGrid.Add(new Vector2Int(0, 1));
+                    attackGrid.Add(new Vector2Int(1, 1));
+                    attackGrid.Add(new Vector2Int(2, 1));
+                    attackGrid.Add(new Vector2Int(-1, 1));
+                    attackGrid.Add(new Vector2Int(-2, 1));
+                    attackPower = 25;
+                    weaponName = "Sword";
+                    break;
+                case 1:
+                    attackGrid.Add(new Vector2Int(0, 1));
+                    attackGrid.Add(new Vector2Int(0, 2));
+                    attackGrid.Add(new Vector2Int(0, 3));
+                    attackGrid.Add(new Vector2Int(0, 4));
+                    attackGrid.Add(new Vector2Int(0, 5));
+                    attackPower = 20;
+                    weaponName = "Spear";
+                    break;
+                case 2:
+                    attackGrid.Add(new Vector2Int(0, 1));
+                    attackPower = 50;
+                    weaponName = "Axe";
+                    break;
+                case 3:
+                    attackGrid.Add(new Vector2Int(0, 10));
+                    attackGrid.Add(new Vector2Int(0, 9));
+                    attackPower = 30;
+                    weaponName = "Crossbow";
+                    break;
+            }
+        }
 
         data.attackGrid = attackGrid;
         data.maxHealth = maxHealth;

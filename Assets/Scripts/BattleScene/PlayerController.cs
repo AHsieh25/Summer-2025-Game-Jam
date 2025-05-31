@@ -34,6 +34,9 @@ public class PlayerController : MonoBehaviour
     private TransformGridHelper gridHelper;
     private UnitCombat combat;
 
+    private SaveData sd;
+    [SerializeField] private CurrentData cd;
+
     void Awake()
     {
         mover = GetComponent<UnitMovement>();
@@ -52,6 +55,9 @@ public class PlayerController : MonoBehaviour
             {
                 attacking = true;
                 attackMenu.Setup();
+                cd.currentData.stats = stats;
+                cd.currentData.helper = gridHelper;
+                viewMove(false);
             }
             TryAttack();
             return;
@@ -82,7 +88,7 @@ public class PlayerController : MonoBehaviour
         if (!playerMenu.gameObject.activeSelf
             && gridHelper.GridPosition == gridPos)
         {
-            playerMenu.Setup(index, stats.data.attackPower, stats.data.moveDistance, stats.currentHealth, stats.data.maxHealth);
+            playerMenu.Setup(index, stats.data.attackPower, stats.data.moveDistance, stats.currentHealth, stats.data.maxHealth, stats.weaponName);
             viewMove(true);
             return;
         }
@@ -151,6 +157,7 @@ public class PlayerController : MonoBehaviour
             playerMenu.Attacking = false;
             attacking = false;
             playerMenu.gameObject.SetActive(true);
+            viewMove(true);
         }
 
         if (!attackMenu.done)
@@ -228,7 +235,7 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
-        viewAttack(view);
+        //viewAttack(view);
         viewing = view;
     }
 
