@@ -324,6 +324,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Goon (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 2704894647683399800, guid: 8e94dc73b5d9c6044acee7a4a5ff9ef3, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
+      objectReference: {fileID: 0}
     - target: {fileID: 3836967647544321705, guid: 8e94dc73b5d9c6044acee7a4a5ff9ef3, type: 3}
       propertyPath: m_LocalPosition.x
       value: 33.3
@@ -384,6 +388,10 @@ PrefabInstance:
       propertyPath: playerTransform
       value: 
       objectReference: {fileID: 1817453018}
+    - target: {fileID: 7956118614802764004, guid: 8e94dc73b5d9c6044acee7a4a5ff9ef3, type: 3}
+      propertyPath: sceneName
+      value: GraveyardScene
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2104,6 +2112,7 @@ MonoBehaviour:
   parent: {fileID: 1647852643}
   CurrentTurn: {fileID: 518896203}
   Actions: {fileID: 662207067}
+  sceneName: GraveyardScene
   player_actions: 3
 --- !u!4 &1527794738
 Transform:
@@ -3260,6 +3269,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Goon (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 2704894647683399800, guid: 8e94dc73b5d9c6044acee7a4a5ff9ef3, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
+      objectReference: {fileID: 0}
     - target: {fileID: 3836967647544321705, guid: 8e94dc73b5d9c6044acee7a4a5ff9ef3, type: 3}
       propertyPath: m_LocalPosition.x
       value: 56.564453
@@ -3320,6 +3333,10 @@ PrefabInstance:
       propertyPath: playerTransform
       value: 
       objectReference: {fileID: 1817453018}
+    - target: {fileID: 7956118614802764004, guid: 8e94dc73b5d9c6044acee7a4a5ff9ef3, type: 3}
+      propertyPath: sceneName
+      value: GraveyardScene
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3950,6 +3967,10 @@ PrefabInstance:
       propertyPath: playerTransform
       value: 
       objectReference: {fileID: 1817453018}
+    - target: {fileID: 7956118614802764004, guid: 8e94dc73b5d9c6044acee7a4a5ff9ef3, type: 3}
+      propertyPath: sceneName
+      value: GraveyardScene
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

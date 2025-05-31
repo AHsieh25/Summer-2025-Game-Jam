@@ -43,7 +43,6 @@ public class DialogueManager : MonoBehaviour
         audioSource = muncSound;
         story = new Story(inkJSON.text);
         EnterDialogue(dialogueKnotName);
-        
     }
 
     private void Start()

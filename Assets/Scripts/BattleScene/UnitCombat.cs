@@ -6,7 +6,6 @@ public class UnitCombat : MonoBehaviour
     public int attackRange = 1;
 
     private UnitStats stats;
-
     void Awake()
     {
         stats = GetComponent<UnitStats>();

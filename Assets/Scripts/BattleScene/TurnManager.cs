@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class TurnManager : MonoBehaviour
@@ -12,6 +13,7 @@ public class TurnManager : MonoBehaviour
     [SerializeField] private GameObject parent;
     [SerializeField] private Text CurrentTurn;
     [SerializeField] private Text Actions;
+    public string sceneName;
 
     public int player_actions = 3;
 
@@ -27,6 +29,7 @@ public class TurnManager : MonoBehaviour
     {
         while (true)
         {
+
             // —— PLAYER TURN ——
             CurrentTurn.text = "Player Turn";
             for (int i = 0; i < player_actions; i++)
@@ -38,6 +41,7 @@ public class TurnManager : MonoBehaviour
                 yield return new WaitUntil(() => player.hasMoved || player1.hasMoved || player2.hasMoved);
             }
             Actions.text = "Actions: 0";
+            changeScene();
 
             // —— ENEMY TURN ——
             CurrentTurn.text = "Enemy Turn";
@@ -47,6 +51,15 @@ public class TurnManager : MonoBehaviour
                 yield return StartCoroutine(child.gameObject.GetComponent<EnemyAI>().TakeTurnCoroutine());
             }
             Debug.Log("TurnManager: enemy turn complete");
+        }
+    }
+
+    public void changeScene()
+    {
+        if (GameObject.FindGameObjectsWithTag("Enemy").Length == 0)
+        {
+            Debug.Log("No enemies remaining");
+            SceneManager.LoadScene(sceneName);
         }
     }
 }
