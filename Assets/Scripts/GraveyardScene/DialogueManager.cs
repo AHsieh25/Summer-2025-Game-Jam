@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class DialogueManager : MonoBehaviour
 {
@@ -35,6 +36,7 @@ public class DialogueManager : MonoBehaviour
 
     [SerializeField] private SaveData sd;
     public string currentSceneName;
+    public string nextSceneName;
 
     private void Update()
     {
@@ -104,7 +106,7 @@ public class DialogueManager : MonoBehaviour
 
         
 
-        SceneController.instance.LoadScene("LoadoutScene");
+        SceneManager.LoadScene(nextSceneName);
     }
 
     void ContinueStory()

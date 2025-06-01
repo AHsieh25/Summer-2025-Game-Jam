@@ -372,9 +372,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneName: BattleScene
-  spearButton: {fileID: 0}
-  axeButton: {fileID: 0}
-  crossbowButton: {fileID: 0}
+  spearButton: {fileID: 1498965971}
+  axeButton: {fileID: 227866153}
+  crossbowButton: {fileID: 1836089416}
   newSceneName: Level1
 --- !u!1 &557457157
 GameObject:
