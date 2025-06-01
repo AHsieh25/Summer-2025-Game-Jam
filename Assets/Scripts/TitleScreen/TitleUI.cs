@@ -4,8 +4,6 @@ using UnityEngine.UI;
 
 public class TitleUI : MonoBehaviour
 {
-    [SerializeField] private Button startButton;
-    [SerializeField] private Button quitButton;
     private SaveData sd;
 
     public void StartButton()

@@ -145,6 +145,7 @@ public class PlayerController : MonoBehaviour
             playerMenu.Attacking = false;
             playerMenu.gameObject.SetActive(true);
             viewing = false;
+            attacking = false;
             ViewMove();
         }
 

@@ -13,6 +13,7 @@ public class AttackHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        stats = cd.currentData.stats;
         hovering = true;
     }
 
@@ -26,8 +27,6 @@ public class AttackHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     {
         if (hovering)
         {
-            stats = cd.currentData.stats;
-
             Tilemap ground = gridManager.ground;
             Vector3Int unitCell3 = ground.WorldToCell(stats.transform.position);
             Vector2Int unitGrid = new Vector2Int(unitCell3.x, unitCell3.y);
@@ -36,14 +35,14 @@ public class AttackHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             switch (index)
             {
                 case 0:
-                    foreach (Vector2Int v in stats.data.attackGrid)
+                    foreach (Vector2Int v in stats.attackGrid)
                     {
                         targetGrid = unitGrid + v;
                         gridManager.SetGroundTileColor(targetGrid, Color.red);
                     }
                     break;
                 case 1:
-                    foreach (Vector2Int v in stats.data.attackGrid)
+                    foreach (Vector2Int v in stats.attackGrid)
                     {
                         targetGrid = v;
                         int temp = targetGrid.x;
@@ -54,7 +53,7 @@ public class AttackHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
                     }
                     break;
                 case 2:
-                    foreach (Vector2Int v in stats.data.attackGrid)
+                    foreach (Vector2Int v in stats.attackGrid)
                     {
                         targetGrid = v;
                         targetGrid.y = targetGrid.y * -1;
@@ -63,7 +62,7 @@ public class AttackHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
                     }
                     break;
                 case 3:
-                    foreach (Vector2Int v in stats.data.attackGrid)
+                    foreach (Vector2Int v in stats.attackGrid)
                     {
                         targetGrid = v;
                         int temp = targetGrid.x;
@@ -87,14 +86,14 @@ public class AttackHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             switch (index)
             {
                 case 0:
-                    foreach (Vector2Int v in stats.data.attackGrid)
+                    foreach (Vector2Int v in stats.attackGrid)
                     {
                         targetGrid = unitGrid + v;
                         gridManager.ResetGroundTileColor(targetGrid);
                     }
                     break;
                 case 1:
-                    foreach (Vector2Int v in stats.data.attackGrid)
+                    foreach (Vector2Int v in stats.attackGrid)
                     {
                         targetGrid = v;
                         int temp = targetGrid.x;
@@ -105,7 +104,7 @@ public class AttackHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
                     }
                     break;
                 case 2:
-                    foreach (Vector2Int v in stats.data.attackGrid)
+                    foreach (Vector2Int v in stats.attackGrid)
                     {
                         targetGrid = v;
                         targetGrid.y = targetGrid.y * -1;
@@ -114,7 +113,7 @@ public class AttackHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
                     }
                     break;
                 case 3:
-                    foreach (Vector2Int v in stats.data.attackGrid)
+                    foreach (Vector2Int v in stats.attackGrid)
                     {
                         targetGrid = v;
                         int temp = targetGrid.x;
