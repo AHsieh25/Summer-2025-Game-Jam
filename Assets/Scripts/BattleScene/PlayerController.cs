@@ -26,6 +26,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private UnitStats stats;
     private UnitCombat combat;
 
+    [SerializeField] private CurrentData cd;
+
     public int index;
 
     void Awake()
@@ -43,9 +45,11 @@ public class PlayerController : MonoBehaviour
         {
             if (!attacking)
             {
+                cd.currentData.stats = stats;
                 attacking = true;
                 attackMenu.Setup();
-                ViewAttack();
+                //ViewAttack();
+                gridManager.ResetAllGroundTileColors();
             }
 
             TryAttack();
@@ -141,6 +145,7 @@ public class PlayerController : MonoBehaviour
             playerMenu.Attacking = false;
             playerMenu.gameObject.SetActive(true);
             viewing = false;
+            ViewMove();
         }
 
         if (!attackMenu.done) return;

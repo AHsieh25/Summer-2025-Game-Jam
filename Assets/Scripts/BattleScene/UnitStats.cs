@@ -7,11 +7,12 @@ public class UnitStats : MonoBehaviour
 
     [SerializeField] private bool isMunc = false;
 
-    [HideInInspector] public int currentHealth;
-    [HideInInspector] public int attackPower;
-    [HideInInspector] public int moveDistance;
-    [HideInInspector] public int attackDistance;
-    [HideInInspector] public List<Vector2Int> attackGrid = new List<Vector2Int>();
+    public int currentHealth;
+    [SerializeField] public int maxHealth;
+    [SerializeField] public int attackPower;
+    [SerializeField] public int moveDistance;
+    [SerializeField] public int attackDistance;
+    [SerializeField] public List<Vector2Int> attackGrid = new List<Vector2Int>();
 
     [HideInInspector] public string weaponName = "";
 
@@ -20,10 +21,10 @@ public class UnitStats : MonoBehaviour
 
     void Awake()
     {
-        /*
         sd = gameObject.AddComponent<SaveData>();
         if (isMunc)
         {
+            /*
             sd.LoadPlayerData();
             weaponType = int.Parse(sd.playerData.weapon);
 
@@ -36,9 +37,16 @@ public class UnitStats : MonoBehaviour
                 Debug.LogWarning("UnitStats: Unable to parse weapon type, defaulting to 0 (Sword).");
                 ApplyWeaponStats(0);
             }
+            */
+            ApplyWeaponStats(0);
         }
-        */
-        ApplyWeaponStats(0);
+        
+        data.maxHealth = maxHealth;
+        currentHealth = data.maxHealth;
+        data.attackPower = attackPower;
+        data.moveDistance = moveDistance;
+        data.attackDistance = attackDistance;
+        data.attackGrid = attackGrid;
     }
 
     private void ApplyWeaponStats(int weaponType)
@@ -85,11 +93,6 @@ public class UnitStats : MonoBehaviour
                 ApplyWeaponStats(0);
                 break;
         }
-
-        currentHealth = data.maxHealth;
-        attackPower = data.attackPower;
-        moveDistance = data.moveDistance;
-        attackDistance = data.attackDistance;
     }
 
     public void TakeDamage(int amount)

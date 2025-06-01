@@ -1,25 +1,15 @@
-using UnityEngine;
+using Unity.VisualScripting;
 using UnityEngine.EventSystems;
+using UnityEngine;
 using UnityEngine.Tilemaps;
 
 public class AttackHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField] private int index;
-
-    [SerializeField] private CurrentData cd;
-
+    private UnitStats stats;
     [SerializeField] private GridManager gridManager;
-
+    [SerializeField] private CurrentData cd;
     private bool hovering = false;
-
-    private void Awake()
-    {
-        if (cd == null)
-            Debug.LogError("AttackHover: CurrentData (cd) not assigned.", this);
-
-        if (gridManager == null)
-            Debug.LogError("AttackHover: GridManager not assigned.", this);
-    }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
@@ -29,78 +19,113 @@ public class AttackHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     public void OnPointerExit(PointerEventData eventData)
     {
         hovering = false;
-        ResetTintedCells();
     }
+
 
     void Update()
     {
-        if (cd == null || gridManager == null) return;
-
-        UnitStats stats = cd.currentData.stats;
-        if (stats == null) return;
-
-        Tilemap ground = gridManager.ground;
-        Vector3Int unitCell3 = ground.WorldToCell(stats.transform.position);
-        Vector2Int unitGrid = new Vector2Int(unitCell3.x, unitCell3.y);
-
         if (hovering)
         {
-            TintAttackCells(stats, unitGrid, true);
-        }
-    }
+            stats = cd.currentData.stats;
 
-    private void TintAttackCells(UnitStats stats, Vector2Int unitGrid, bool tint)
-    {
-        Tilemap ground = gridManager.ground;
+            Tilemap ground = gridManager.ground;
+            Vector3Int unitCell3 = ground.WorldToCell(stats.transform.position);
+            Vector2Int unitGrid = new Vector2Int(unitCell3.x, unitCell3.y);
 
-        foreach (Vector2Int offset in stats.attackGrid)
-        {
-            Vector2Int target = Vector2Int.zero;
-
+            Vector2Int targetGrid;
             switch (index)
             {
-                case 0: // Up
-                    target = unitGrid + offset;
+                case 0:
+                    foreach (Vector2Int v in stats.data.attackGrid)
+                    {
+                        targetGrid = unitGrid + v;
+                        gridManager.SetGroundTileColor(targetGrid, Color.red);
+                    }
                     break;
-                case 1: // Right
-                    target = unitGrid + new Vector2Int(offset.y, offset.x);
+                case 1:
+                    foreach (Vector2Int v in stats.data.attackGrid)
+                    {
+                        targetGrid = v;
+                        int temp = targetGrid.x;
+                        targetGrid.x = targetGrid.y;
+                        targetGrid.y = temp;
+                        targetGrid = unitGrid + targetGrid;
+                        gridManager.SetGroundTileColor(targetGrid, Color.red);
+                    }
                     break;
-                case 2: // Down
-                    target = unitGrid + new Vector2Int(offset.x, -offset.y);
+                case 2:
+                    foreach (Vector2Int v in stats.data.attackGrid)
+                    {
+                        targetGrid = v;
+                        targetGrid.y = targetGrid.y * -1;
+                        targetGrid = unitGrid + targetGrid;
+                        gridManager.SetGroundTileColor(targetGrid, Color.red);
+                    }
                     break;
-                case 3: // Left
-                    var rot = new Vector2Int(offset.y, offset.x);
-                    target = unitGrid + new Vector2Int(-rot.x, rot.y);
+                case 3:
+                    foreach (Vector2Int v in stats.data.attackGrid)
+                    {
+                        targetGrid = v;
+                        int temp = targetGrid.x;
+                        targetGrid.x = targetGrid.y;
+                        targetGrid.y = temp;
+                        targetGrid.x = targetGrid.x * -1;
+                        targetGrid = unitGrid + targetGrid;
+                        gridManager.SetGroundTileColor(targetGrid, Color.red);
+                    }
                     break;
-                default:
-                    continue;
-            }
-
-            Vector3Int cell3 = new Vector3Int(target.x, target.y, 0);
-
-            if (!ground.HasTile(cell3))
-                continue;
-
-            if (tint)
-            {
-                gridManager.SetGroundTileColor(target, Color.red);
-            }
-            else
-            {
-                gridManager.ResetGroundTileColor(target);
             }
         }
-    }
+        else
+        {
+            stats = cd.currentData.stats;
+            Tilemap ground = gridManager.ground;
+            Vector3Int unitCell3 = ground.WorldToCell(stats.transform.position);
+            Vector2Int unitGrid = new Vector2Int(unitCell3.x, unitCell3.y);
 
-    private void ResetTintedCells()
-    {
-        UnitStats stats = cd.currentData.stats;
-        if (stats == null) return;
-
-        Tilemap ground = gridManager.ground;
-        Vector3Int unitCell3 = ground.WorldToCell(stats.transform.position);
-        Vector2Int unitGrid = new Vector2Int(unitCell3.x, unitCell3.y);
-
-        TintAttackCells(stats, unitGrid, false);
+            Vector2Int targetGrid;
+            switch (index)
+            {
+                case 0:
+                    foreach (Vector2Int v in stats.data.attackGrid)
+                    {
+                        targetGrid = unitGrid + v;
+                        gridManager.ResetGroundTileColor(targetGrid);
+                    }
+                    break;
+                case 1:
+                    foreach (Vector2Int v in stats.data.attackGrid)
+                    {
+                        targetGrid = v;
+                        int temp = targetGrid.x;
+                        targetGrid.x = targetGrid.y;
+                        targetGrid.y = temp;
+                        targetGrid = unitGrid + targetGrid;
+                        gridManager.ResetGroundTileColor(targetGrid);
+                    }
+                    break;
+                case 2:
+                    foreach (Vector2Int v in stats.data.attackGrid)
+                    {
+                        targetGrid = v;
+                        targetGrid.y = targetGrid.y * -1;
+                        targetGrid = unitGrid + targetGrid;
+                        gridManager.ResetGroundTileColor(targetGrid);
+                    }
+                    break;
+                case 3:
+                    foreach (Vector2Int v in stats.data.attackGrid)
+                    {
+                        targetGrid = v;
+                        int temp = targetGrid.x;
+                        targetGrid.x = targetGrid.y;
+                        targetGrid.y = temp;
+                        targetGrid.x = targetGrid.x * -1;
+                        targetGrid = unitGrid + targetGrid;
+                        gridManager.ResetGroundTileColor(targetGrid);
+                    }
+                    break;
+            }
+        }
     }
 }
