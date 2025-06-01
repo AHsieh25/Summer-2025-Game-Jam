@@ -240,6 +240,7 @@ MonoBehaviour:
   index: 0
   gridManager: {fileID: 2092946338}
   cd: {fileID: 166275829}
+  hovering: 0
 --- !u!222 &7516963
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1922,10 +1923,10 @@ MonoBehaviour:
   right: 0
   done: 0
   back: 0
-  upButton: {fileID: 7516960}
-  downButton: {fileID: 1067955072}
-  rightButton: {fileID: 1050236734}
-  leftButton: {fileID: 1064723646}
+  attackHoverUp: {fileID: 7516962}
+  attackHoverDown: {fileID: 1067955074}
+  attackHoverRight: {fileID: 1050236736}
+  attackHoverLeft: {fileID: 1064723648}
 --- !u!114 &135465406
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3414,10 +3415,10 @@ MonoBehaviour:
   right: 0
   done: 0
   back: 0
-  upButton: {fileID: 0}
-  downButton: {fileID: 0}
-  rightButton: {fileID: 0}
-  leftButton: {fileID: 0}
+  attackHoverUp: {fileID: 0}
+  attackHoverDown: {fileID: 0}
+  attackHoverRight: {fileID: 0}
+  attackHoverLeft: {fileID: 0}
 --- !u!114 &382023148
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4166,6 +4167,7 @@ MonoBehaviour:
   index: 1
   gridManager: {fileID: 2092946338}
   cd: {fileID: 166275829}
+  hovering: 0
 --- !u!222 &1050236737
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4394,6 +4396,7 @@ MonoBehaviour:
   index: 3
   gridManager: {fileID: 2092946338}
   cd: {fileID: 166275829}
+  hovering: 0
 --- !u!222 &1064723649
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4543,6 +4546,7 @@ MonoBehaviour:
   index: 2
   gridManager: {fileID: 2092946338}
   cd: {fileID: 166275829}
+  hovering: 0
 --- !u!222 &1067955075
 CanvasRenderer:
   m_ObjectHideFlags: 0

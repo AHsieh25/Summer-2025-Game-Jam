@@ -23,6 +23,8 @@ public class GridManager : MonoBehaviour
     { 
         Vector3Int cell = new Vector3Int(gridPos.x, gridPos.y, 0);
 
+        Debug.Log($"Highlighting tile at {cell}");
+
         if (!ground.HasTile(cell))
             return;
         ground.SetTileFlags(cell, TileFlags.None);

@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class LoadoutUI : MonoBehaviour
 {
@@ -7,6 +8,7 @@ public class LoadoutUI : MonoBehaviour
     public Button spearButton;
     public Button axeButton;
     public Button crossbowButton;
+    public string newSceneName;
     private SaveData sd;
     public static bool hasSpear = false;
     public static bool hasAxe = false;
@@ -35,27 +37,27 @@ public class LoadoutUI : MonoBehaviour
     {
         sd.playerData.weapon = "0";
         sd.SavePlayerData();
-        SceneController.instance.LoadScene("Level1");
+        SceneManager.LoadScene(newSceneName);
     }
 
     public void SpearButton()
     {
         sd.playerData.weapon = "1";
         sd.SavePlayerData();
-        SceneController.instance.LoadScene("Level1");
+        SceneManager.LoadScene(newSceneName);
     }
 
     public void AxeButton()
     {
         sd.playerData.weapon = "2";
         sd.SavePlayerData();
-        SceneController.instance.LoadScene("Level1");
+        SceneManager.LoadScene(newSceneName);
     }
 
     public void CrossbowButton()
     {
         sd.playerData.weapon = "3";
         sd.SavePlayerData();
-        SceneController.instance.LoadScene("Level1");
+        SceneManager.LoadScene(newSceneName);
     }
 }

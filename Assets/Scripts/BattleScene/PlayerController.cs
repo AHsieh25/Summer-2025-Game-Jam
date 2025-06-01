@@ -48,7 +48,6 @@ public class PlayerController : MonoBehaviour
                 cd.currentData.stats = stats;
                 attacking = true;
                 attackMenu.Setup();
-                //ViewAttack();
                 gridManager.ResetAllGroundTileColors();
             }
 
@@ -236,27 +235,5 @@ public class PlayerController : MonoBehaviour
             }
         }
         viewing = true;
-    }
-
-    private void ViewAttack()
-    {
-        gridManager.ResetAllGroundTileColors();
-
-        Vector3Int myCell3D = gridManager.ground.WorldToCell(transform.position);
-        Vector2Int unitGrid = new Vector2Int(myCell3D.x, myCell3D.y);
-
-        List<Vector2Int> targetCells = new List<Vector2Int>();
-        Vector2Int targetGrid = Vector2Int.zero;
-        foreach (Vector2Int v in stats.attackGrid)
-        {
-            targetGrid = v;
-            gridManager.SetGroundTileColor(unitGrid + targetGrid, new Color(1f, 0f, 0f));
-            targetGrid = new Vector2Int(v.y, -v.x);
-            gridManager.SetGroundTileColor(unitGrid + targetGrid, new Color(1f, 0f, 0f));
-            targetGrid = new Vector2Int(-v.x, -v.y);
-            gridManager.SetGroundTileColor(unitGrid + targetGrid, new Color(1f, 0f, 0f));
-            targetGrid = new Vector2Int(-v.y, v.x);
-            gridManager.SetGroundTileColor(unitGrid + targetGrid, new Color(1f, 0f, 0f));
-        }
     }
 }

@@ -375,6 +375,7 @@ MonoBehaviour:
   spearButton: {fileID: 0}
   axeButton: {fileID: 0}
   crossbowButton: {fileID: 0}
+  newSceneName: Level1
 --- !u!1 &557457157
 GameObject:
   m_ObjectHideFlags: 0
@@ -513,8 +514,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Pick a Weapon:'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: ba067c03d1025a540abc174f5bbba037, type: 2}
-  m_sharedMaterial: {fileID: 7386203780250580413, guid: ba067c03d1025a540abc174f5bbba037, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: e4e13ab3d4674474a8b0b8219f010346, type: 2}
+  m_sharedMaterial: {fileID: 5533738921029051965, guid: e4e13ab3d4674474a8b0b8219f010346, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

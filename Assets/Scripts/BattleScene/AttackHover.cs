@@ -10,6 +10,7 @@ public class AttackHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     [SerializeField] private GridManager gridManager;
     [SerializeField] private CurrentData cd;
     public bool hovering = false;
+    public bool reset = false;
 
     public void OnPointerEnter(PointerEventData eventData)
     {
@@ -19,7 +20,6 @@ public class AttackHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     public void OnPointerExit(PointerEventData eventData)
     {
         hovering = false;
-        gridManager.ResetAllGroundTileColors();
     }
 
 
@@ -27,6 +27,7 @@ public class AttackHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     {
         if (hovering)
         {
+            Debug.Log(hovering);
             stats = cd.currentData.stats;
             Tilemap ground = gridManager.ground;
             Vector3Int unitCell3 = ground.WorldToCell(stats.transform.position);
@@ -64,8 +65,9 @@ public class AttackHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
                     }
                     break;
             }
+            reset = true;
         }
-        else
+        else if (reset)
         {
             stats = cd.currentData.stats;
             Tilemap ground = gridManager.ground;
@@ -104,6 +106,7 @@ public class AttackHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
                     }
                     break;
             }
+            reset = false;
         }
     }
 }
