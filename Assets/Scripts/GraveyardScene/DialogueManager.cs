@@ -12,7 +12,7 @@ public class DialogueManager : MonoBehaviour
 
     [SerializeField] GameObject muncProfile;
     [SerializeField] GameObject gkProfile;
-    private GameObject profileImage;
+    [SerializeField] GameObject profileImage;
 
     [SerializeField] TextAsset inkJSON;
     [SerializeField] GameObject textBox;
@@ -26,9 +26,10 @@ public class DialogueManager : MonoBehaviour
 
     [SerializeField] AudioSource muncSound;
     [SerializeField] AudioSource gkSound;
+    [SerializeField] AudioSource narratorSound;
     private AudioSource audioSource;
 
-    [SerializeField] private string dialogueKnotName;
+    private string dialogueKnotName;
     private Story story;
     private bool dialoguePlaying = false;
 
@@ -42,10 +43,11 @@ public class DialogueManager : MonoBehaviour
 
     void Awake()
     {
+        dialogueKnotName = DialogueState.CurrentKnotName;
+        sd = gameObject.AddComponent<SaveData>();
         sd.playerData.scene = currentSceneName;
         sd.SavePlayerData();
-        profileImage = muncProfile;
-        audioSource = muncSound;
+        audioSource = narratorSound;
         story = new Story(inkJSON.text);
         EnterDialogue(dialogueKnotName);
     }
@@ -77,6 +79,10 @@ public class DialogueManager : MonoBehaviour
             DoSwapProfile(who);
         });
 
+        story.BindExternalFunction("setNextKnot", (string knot) => {
+            DialogueState.CurrentKnotName = knot;
+        });
+
         if (!knotName.Equals(""))
         {
             story.ChoosePathString(knotName);
@@ -90,10 +96,15 @@ public class DialogueManager : MonoBehaviour
     private void ExitDialogue()
     {
         story.UnbindExternalFunction("swapProfile");
+        story.UnbindExternalFunction("setNextKnot");
         Debug.Log("Exiting dialogue");
         dialoguePlaying = false;
         textBox.SetActive(false);
         profileImage.SetActive(false);
+
+        
+
+        SceneController.instance.LoadScene("LoadoutScene");
     }
 
     void ContinueStory()
@@ -124,13 +135,21 @@ public class DialogueManager : MonoBehaviour
         {
             profileImage = gkProfile;
             audioSource = gkSound;
+            profileImage.SetActive(true);
         }
-        else
+        else if (who == "Munc")
         {
             profileImage = muncProfile;
             audioSource = muncSound;
+            profileImage.SetActive(true);
         }
-        profileImage.SetActive(true);
+        // narrator
+        else
+        {
+            profileImage.SetActive(false);
+            audioSource = narratorSound;
+        }
+        
 
         // Update the name label
         nameText.GetComponent<TMPro.TMP_Text>().text = who;
@@ -154,7 +173,6 @@ public class DialogueManager : MonoBehaviour
         yield return new WaitForSeconds(0.05f);
         yield return new WaitForSeconds(1);
         yield return new WaitUntil(() => textLength == currentTextLength);
-        yield return new WaitForSeconds(0.5f);
         nextButton.SetActive(true);
     }
 }

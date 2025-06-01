@@ -8,6 +8,11 @@ public class TitleUI : MonoBehaviour
 
     public void StartButton()
     {
+        SceneManager.LoadScene("GraveyardScene");
+    }
+
+    public void LoadButton()
+    {
         sd = gameObject.AddComponent<SaveData>();
         sd.LoadPlayerData();
         SceneManager.LoadScene(sd.playerData.scene);

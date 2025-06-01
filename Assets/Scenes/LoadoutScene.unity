@@ -137,7 +137,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &227866152
 RectTransform:
   m_ObjectHideFlags: 0
@@ -372,6 +372,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneName: BattleScene
+  spearButton: {fileID: 0}
+  axeButton: {fileID: 0}
+  crossbowButton: {fileID: 0}
 --- !u!1 &557457157
 GameObject:
   m_ObjectHideFlags: 0
@@ -900,7 +903,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1498965970
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1245,7 +1248,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1836089416
 MonoBehaviour:
   m_ObjectHideFlags: 0

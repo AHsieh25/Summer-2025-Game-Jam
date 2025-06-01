@@ -14,8 +14,8 @@ public class TurnManager : MonoBehaviour
     [SerializeField] private Text CurrentTurn;
     [SerializeField] private Text Actions;
     private SaveData sd;
-    public string nextSceneName;
     public string currentSceneName;
+    public string nextSceneName;
 
     public int player_actions = 3;
 

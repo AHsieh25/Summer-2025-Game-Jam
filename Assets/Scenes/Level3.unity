@@ -3813,7 +3813,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -5354,7 +5354,6 @@ MonoBehaviour:
   parent: {fileID: 1647852643}
   CurrentTurn: {fileID: 518896203}
   Actions: {fileID: 662207067}
-  nextSceneName: GraveyardScene
   currentSceneName: BattleScene
   player_actions: 3
 --- !u!4 &1527794738
@@ -12140,7 +12139,7 @@ MonoBehaviour:
   data: {fileID: 11400000, guid: 2f4b5947bed24774da56732035ebc0bc, type: 2}
   isMunc: 0
   currentHealth: 100
-  maxHealth: 100
+  maxHealth: 0
   attackPower: 25
   moveDistance: 7
   attackDistance: 1
