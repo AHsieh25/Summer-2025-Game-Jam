@@ -6,9 +6,15 @@ public class LoadoutUI : MonoBehaviour
     [SerializeField] private string sceneName;
     private SaveData sd;
 
-    public void SwordButton()
+    public void Awake()
     {
         sd = gameObject.AddComponent<SaveData>();
+        sd.LoadPlayerData();
+        sd.playerData.scene = "LoadoutScene";
+    }
+
+    public void SwordButton()
+    {
         sd.playerData.weapon = "0";
         sd.SavePlayerData();
         SceneManager.LoadScene(sceneName);
@@ -16,7 +22,6 @@ public class LoadoutUI : MonoBehaviour
 
     public void SpearButton()
     {
-        sd = gameObject.AddComponent<SaveData>();
         sd.playerData.weapon = "1";
         sd.SavePlayerData();
         SceneManager.LoadScene(sceneName);
@@ -24,7 +29,6 @@ public class LoadoutUI : MonoBehaviour
 
     public void AxeButton()
     {
-        sd = gameObject.AddComponent<SaveData>();
         sd.playerData.weapon = "2";
         sd.SavePlayerData();
         SceneManager.LoadScene(sceneName);
@@ -32,7 +36,6 @@ public class LoadoutUI : MonoBehaviour
 
     public void CrossbowButton()
     {
-        sd = gameObject.AddComponent<SaveData>();
         sd.playerData.weapon = "3";
         sd.SavePlayerData();
         SceneManager.LoadScene(sceneName);

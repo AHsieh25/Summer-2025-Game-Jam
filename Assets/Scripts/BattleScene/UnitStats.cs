@@ -17,18 +17,17 @@ public class UnitStats : MonoBehaviour
     [HideInInspector] public string weaponName = "";
 
     private SaveData sd;
-    private int weaponType;
+    private int weaponType = -1;
 
     void Awake()
     {
         sd = gameObject.AddComponent<SaveData>();
         if (isMunc)
         {
-            /*
             sd.LoadPlayerData();
             weaponType = int.Parse(sd.playerData.weapon);
 
-            if (int.TryParse(sd.playerData.weapon, out weaponType))
+            if (weaponType != -1)
             {
                 ApplyWeaponStats(weaponType);
             }
@@ -37,8 +36,6 @@ public class UnitStats : MonoBehaviour
                 Debug.LogWarning("UnitStats: Unable to parse weapon type, defaulting to 0 (Sword).");
                 ApplyWeaponStats(0);
             }
-            */
-            ApplyWeaponStats(0);
         }
         
         data.maxHealth = maxHealth;

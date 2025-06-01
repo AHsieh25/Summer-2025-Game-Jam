@@ -3838,7 +3838,7 @@ Camera:
   far clip plane: 1000
   field of view: 34
   orthographic: 1
-  orthographic size: 300
+  orthographic size: 280
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -12139,6 +12139,7 @@ MonoBehaviour:
   data: {fileID: 11400000, guid: 2f4b5947bed24774da56732035ebc0bc, type: 2}
   isMunc: 0
   currentHealth: 100
+  maxHealth: 0
   attackPower: 25
   moveDistance: 7
   attackDistance: 1
@@ -12179,7 +12180,7 @@ MonoBehaviour:
   playerMenu: {fileID: 103720743}
   attackMenu: {fileID: 745254979}
   stats: {fileID: 1765959123}
-  cd: {fileID: 0}
+  cd: {fileID: 1119053596}
   index: 0
 --- !u!212 &1765959126
 SpriteRenderer:
@@ -12518,7 +12519,7 @@ MonoBehaviour:
   playerMenu: {fileID: 103720743}
   attackMenu: {fileID: 745254979}
   stats: {fileID: 1817453022}
-  cd: {fileID: 0}
+  cd: {fileID: 1119053596}
   index: 0
 --- !u!212 &1817453021
 SpriteRenderer:
@@ -12590,6 +12591,7 @@ MonoBehaviour:
   data: {fileID: 11400000, guid: 2f4b5947bed24774da56732035ebc0bc, type: 2}
   isMunc: 1
   currentHealth: 100
+  maxHealth: 0
   attackPower: 25
   moveDistance: 7
   attackDistance: 1
@@ -13377,6 +13379,7 @@ MonoBehaviour:
   data: {fileID: 11400000, guid: 2f4b5947bed24774da56732035ebc0bc, type: 2}
   isMunc: 0
   currentHealth: 100
+  maxHealth: 0
   attackPower: 25
   moveDistance: 7
   attackDistance: 1
@@ -13417,7 +13420,7 @@ MonoBehaviour:
   playerMenu: {fileID: 103720743}
   attackMenu: {fileID: 745254979}
   stats: {fileID: 2065757458}
-  cd: {fileID: 0}
+  cd: {fileID: 1119053596}
   index: 0
 --- !u!212 &2065757461
 SpriteRenderer:

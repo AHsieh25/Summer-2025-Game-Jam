@@ -25,6 +25,7 @@ public class PlayerMenu : MonoBehaviour
         attackButton.gameObject.SetActive(true);
         moveButton.gameObject.SetActive(true);
         Health.text = "Health: " + (currentHealth).ToString() + "/" + (maxHealth).ToString();
+        Attack.text = weaponName + "Attack: " + (attack).ToString();
     }
 
     public void EnemySetup(int currentHealth, int maxHealth)

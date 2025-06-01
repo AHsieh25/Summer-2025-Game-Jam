@@ -23,6 +23,7 @@ public class TurnManager : MonoBehaviour
     {
         sd = gameObject.AddComponent<SaveData>();
 
+        sd.LoadPlayerData();
         sd.playerData.scene = currentSceneName;
         sd.SavePlayerData();
 
