@@ -4451,6 +4451,10 @@ MonoBehaviour:
   downButton: {fileID: 1980763928}
   rightButton: {fileID: 1544459328}
   leftButton: {fileID: 2137106288}
+  attackHover: {fileID: 1816282877}
+  attackHover1: {fileID: 1980763931}
+  attackHover2: {fileID: 1544459331}
+  attackHover3: {fileID: 2137106291}
 --- !u!114 &745254980
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5520,6 +5524,7 @@ MonoBehaviour:
   index: 1
   gridManager: {fileID: 2038246591}
   cd: {fileID: 1119053596}
+  hovering: 0
 --- !u!1 &1567939116
 GameObject:
   m_ObjectHideFlags: 0
@@ -12145,6 +12150,7 @@ MonoBehaviour:
   attackGrid:
   - {x: 0, y: 1}
   - {x: 0, y: 2}
+  - {x: 0, y: 3}
   weaponName: 
 --- !u!114 &1765959124
 MonoBehaviour:
@@ -12446,6 +12452,7 @@ MonoBehaviour:
   index: 0
   gridManager: {fileID: 2038246591}
   cd: {fileID: 1119053596}
+  hovering: 0
 --- !u!1 &1817453017
 GameObject:
   m_ObjectHideFlags: 0
@@ -12590,7 +12597,7 @@ MonoBehaviour:
   data: {fileID: 11400000, guid: 2f4b5947bed24774da56732035ebc0bc, type: 2}
   isMunc: 1
   currentHealth: 100
-  maxHealth: 0
+  maxHealth: 100
   attackPower: 25
   moveDistance: 7
   attackDistance: 1
@@ -12769,6 +12776,10 @@ MonoBehaviour:
   downButton: {fileID: 0}
   rightButton: {fileID: 0}
   leftButton: {fileID: 0}
+  attackHover: {fileID: 0}
+  attackHover1: {fileID: 0}
+  attackHover2: {fileID: 0}
+  attackHover3: {fileID: 0}
 --- !u!114 &1830900780
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13283,6 +13294,7 @@ MonoBehaviour:
   index: 2
   gridManager: {fileID: 2038246591}
   cd: {fileID: 1119053596}
+  hovering: 0
 --- !u!1 &2038246589
 GameObject:
   m_ObjectHideFlags: 0
@@ -13378,13 +13390,14 @@ MonoBehaviour:
   data: {fileID: 11400000, guid: 2f4b5947bed24774da56732035ebc0bc, type: 2}
   isMunc: 0
   currentHealth: 100
-  maxHealth: 0
+  maxHealth: 100
   attackPower: 25
   moveDistance: 7
   attackDistance: 1
   attackGrid:
   - {x: 0, y: 1}
-  - {x: 0, y: 2}
+  - {x: 1, y: 1}
+  - {x: -1, y: 1}
   weaponName: 
 --- !u!114 &2065757459
 MonoBehaviour:
@@ -13686,6 +13699,7 @@ MonoBehaviour:
   index: 3
   gridManager: {fileID: 2038246591}
   cd: {fileID: 1119053596}
+  hovering: 0
 --- !u!1001 &8823454518468301371
 PrefabInstance:
   m_ObjectHideFlags: 0
