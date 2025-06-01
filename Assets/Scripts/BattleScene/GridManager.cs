@@ -25,8 +25,8 @@ public class GridManager : MonoBehaviour
 
         if (!ground.HasTile(cell))
             return;
-
         ground.SetTileFlags(cell, TileFlags.None);
+        Debug.Log(cell.ToString());
         ground.SetColor(cell, color);
     }
     public void ResetGroundTileColor(Vector2Int gridPos)

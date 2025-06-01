@@ -4447,14 +4447,10 @@ MonoBehaviour:
   right: 0
   done: 0
   back: 0
-  upButton: {fileID: 1816282874}
-  downButton: {fileID: 1980763928}
-  rightButton: {fileID: 1544459328}
-  leftButton: {fileID: 2137106288}
-  attackHover: {fileID: 1816282877}
-  attackHover1: {fileID: 1980763931}
-  attackHover2: {fileID: 1544459331}
-  attackHover3: {fileID: 2137106291}
+  attackHoverUp: {fileID: 1816282877}
+  attackHoverDown: {fileID: 1980763931}
+  attackHoverRight: {fileID: 1544459331}
+  attackHoverLeft: {fileID: 2137106291}
 --- !u!114 &745254980
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12773,14 +12769,10 @@ MonoBehaviour:
   right: 0
   done: 0
   back: 0
-  upButton: {fileID: 0}
-  downButton: {fileID: 0}
-  rightButton: {fileID: 0}
-  leftButton: {fileID: 0}
-  attackHover: {fileID: 0}
-  attackHover1: {fileID: 0}
-  attackHover2: {fileID: 0}
-  attackHover3: {fileID: 0}
+  attackHoverUp: {fileID: 0}
+  attackHoverDown: {fileID: 0}
+  attackHoverRight: {fileID: 0}
+  attackHoverLeft: {fileID: 0}
 --- !u!114 &1830900780
 MonoBehaviour:
   m_ObjectHideFlags: 0
