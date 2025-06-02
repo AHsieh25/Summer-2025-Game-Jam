@@ -3,20 +3,20 @@ using UnityEngine.Tilemaps;
 
 public class UnitCombat : MonoBehaviour
 {
-    private UnitStats stats;
+    private StatsUpdater stats;
     private GridManager gridManager;
     private Tilemap groundTilemap;
 
     void Awake()
     {
-        stats = GetComponent<UnitStats>();
+        stats = GetComponent<StatsUpdater>();
     }
 
     public void TryAttack(GameObject target)
     {
-        UnitStats targetStats = target.GetComponent<UnitStats>();
+        StatsUpdater targetStats = target.GetComponent<StatsUpdater>();
 
-        int attackPower = stats.attackPower;
+        int attackPower = stats.AttackPower;
 
         targetStats.TakeDamage(attackPower);
     }

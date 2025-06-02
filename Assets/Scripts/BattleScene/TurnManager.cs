@@ -1,35 +1,35 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Security.Cryptography;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class TurnManager : MonoBehaviour
 {
-    [SerializeField] private PlayerController player;
-    [SerializeField] private PlayerController player1;
-    [SerializeField] private PlayerController player2;
-    [SerializeField] private GameObject parent;
+    [SerializeField] private GameObject playerParent;
+    [SerializeField] private GameObject enemyParent;
     [SerializeField] private Text CurrentTurn;
     [SerializeField] private Text Actions;
     private SaveData sd;
-    public string currentSceneName;
+    private List<PlayerController> players = new List<PlayerController>();
     public string nextSceneName;
-
     public int player_actions = 3;
 
     void Start()
     {
         sd = gameObject.AddComponent<SaveData>();
-
         sd.LoadPlayerData();
-        sd.playerData.scene = currentSceneName;
-        sd.SavePlayerData();
+        sd.SavePlayerData(null, null);
 
-        player.index = 0;
-        player1.index = 1;
-        player2.index = 2;
+        PlayerController[] array = playerParent.GetComponentsInChildren<PlayerController>();
+        players = new List<PlayerController>(array);
+
+        for (int i = 0; i < players.Count; i++)
+        {
+            players[i].index = i;
+        }
+
         StartCoroutine(GameLoop());
     }
 
@@ -42,32 +42,31 @@ public class TurnManager : MonoBehaviour
             CurrentTurn.text = "Player Turn";
             for (int i = 0; i < player_actions; i++)
             {
-                changeScene();
                 Actions.text = "Actions: " + (player_actions - i).ToString();
-                player.hasMoved = false;
-                player1.hasMoved = false;
-                player2.hasMoved = false;
-                yield return new WaitUntil(() => player.hasMoved || player1.hasMoved || player2.hasMoved);
+                foreach (var pc in players)
+                {
+                    pc.hasMoved = false;
+                }
+                yield return new WaitUntil(() => players.Any(p => p.hasMoved));
             }
+
             Actions.text = "Actions: 0";
+            yield return new WaitForSeconds(1.5f);
 
             // —— ENEMY TURN ——
+            // Change scene when empty
+            if (GameObject.FindGameObjectsWithTag("Enemy").Length == 0)
+            {
+                Debug.Log("No enemies remaining");
+                SceneManager.LoadScene(nextSceneName);
+            }
             CurrentTurn.text = "Enemy Turn";
             Debug.Log("TurnManager: starting enemy turn");
-            foreach (Transform child in parent.transform)
+            foreach (Transform enemy in enemyParent.transform)
             {
-                yield return StartCoroutine(child.gameObject.GetComponent<EnemyAI>().TakeTurnCoroutine());
+                yield return StartCoroutine(enemy.gameObject.GetComponent<EnemyAI>().TakeTurnCoroutine());
             }
             Debug.Log("TurnManager: enemy turn complete");
-        }
-    }
-
-    public void changeScene()
-    {
-        if (GameObject.FindGameObjectsWithTag("Enemy").Length == 0)
-        {
-            Debug.Log("No enemies remaining");
-            SceneManager.LoadScene(nextSceneName);
         }
     }
 }

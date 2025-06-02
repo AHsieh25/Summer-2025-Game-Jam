@@ -51,4 +51,11 @@ public class GridManager : MonoBehaviour
             }
         }
     }
+
+    public Vector2Int GetGridPos(Vector3 worldClick)
+    {
+        Vector3Int worldPos = ground.WorldToCell(worldClick);
+        Vector2Int gridPos = new Vector2Int(worldPos.x, worldPos.y);
+        return gridPos;
+    }
 }

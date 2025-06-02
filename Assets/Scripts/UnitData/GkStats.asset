@@ -9,8 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 440c0352612d4004b87ff62c602eba2c, type: 3}
-  m_Name: GoonStats
+  m_Script: {fileID: 11500000, guid: 89ac5ce490c110f4c8ffd16de37ac446, type: 3}
+  m_Name: GkStats
   m_EditorClassIdentifier: 
-  maxHealth: 50
-  attackPower: 10
+  unitName: Gravekeeper
+  maxHealth: 200
+  moveDistance: 3
+  weaponType: 4
+  skills: []

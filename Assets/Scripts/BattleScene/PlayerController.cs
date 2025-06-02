@@ -1,42 +1,32 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.Burst.Intrinsics;
-using Unity.VisualScripting;
-using Unity.VisualScripting.ReorderableList.Internal;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Tilemaps;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private int movementRange;
-    [SerializeField] private int attackRange;
-    private UnitMovement mover;
+    
     [SerializeField] private GridManager gridManager;
     [SerializeField] private Pathfinding pathfinding;
+    [SerializeField] private CurrentData cd;
 
     [HideInInspector] public bool hasMoved = false;
-    private bool viewing = false;
-    private bool attacking = false;
 
     public PlayerMenu playerMenu;
     public AttackMenu attackMenu;
 
-    [SerializeField] private UnitStats stats;
-    private UnitCombat combat;
-
-    [SerializeField] private CurrentData cd;
-
+    private StatsUpdater stats;
+    private CharacterStateMachine stateMachine;
+    private bool viewing = false;
+    private bool attacking = false;
     public int index;
 
     void Awake()
     {
-        mover = GetComponent<UnitMovement>();
-        combat = GetComponent<UnitCombat>();
-
-        if (gridManager == null) gridManager = FindFirstObjectByType<GridManager>();
-        if (pathfinding == null) pathfinding = FindFirstObjectByType<Pathfinding>();
+        stateMachine = GetComponent<CharacterStateMachine>();
+        stats = GetComponent<StatsUpdater>();
     }
 
     void Update()
@@ -64,43 +54,46 @@ public class PlayerController : MonoBehaviour
         if (playerMenu.index != -1 && playerMenu.index != index)
             return;
 
-        if (mover.isMoving || hasMoved) return;
+        if (stateMachine.stateRunning || hasMoved) return;
 
         if (!Mouse.current.leftButton.wasPressedThisFrame) return;
 
         Vector2 mousePx = Mouse.current.position.ReadValue();
         Vector3 worldClick = Camera.main.ScreenToWorldPoint(mousePx);
         worldClick.z = 0f;
-        Vector3Int clickedCell = gridManager.ground.WorldToCell(worldClick);
-        Vector2Int clickGrid = new Vector2Int(clickedCell.x, clickedCell.y);
 
-        Vector3Int myCell = gridManager.ground.WorldToCell(transform.position);
-        Vector2Int myGrid = new Vector2Int(myCell.x, myCell.y);
+        Vector2Int clickGrid = gridManager.GetGridPos(worldClick);
+        Vector2Int myGrid = gridManager.GetGridPos(transform.position);
 
         if (!playerMenu.gameObject.activeSelf && clickGrid == myGrid)
         {
-            playerMenu.Setup(index, stats.data.attackPower, stats.data.moveDistance, stats.currentHealth, stats.data.maxHealth, stats.weaponName);
+            playerMenu.Setup(
+                index,
+                stats.AttackPower,
+                stats.MoveDistance,
+                stats.CurrentHealth,
+                stats.MaxHealth,
+                stats.weaponName);
+
             ViewMove();
             viewing = true;
             return;
         }
 
-        UnitStats clickedEnemyStats = null;
+        StatsUpdater clickedEnemyStats = null;
         foreach (var enemy in FindObjectsByType<EnemyAI>(FindObjectsSortMode.None))
         {
-            Vector3Int enemyCell = gridManager.ground.WorldToCell(enemy.transform.position);
-            Vector2Int enemyGrid = new Vector2Int(enemyCell.x, enemyCell.y);
+            Vector2Int enemyGrid = gridManager.GetGridPos(enemy.transform.position);
             if (enemyGrid == clickGrid)
             {
-                clickedEnemyStats = enemy.GetComponent<UnitStats>();
+                clickedEnemyStats = enemy.GetComponent<StatsUpdater>();
                 break;
             }
         }
 
         if (!playerMenu.gameObject.activeSelf && clickedEnemyStats != null && playerMenu.index == -1)
         {
-            playerMenu.EnemySetup(clickedEnemyStats.currentHealth, clickedEnemyStats.data.maxHealth
-            );
+            playerMenu.EnemySetup(clickedEnemyStats.CurrentHealth, clickedEnemyStats.MaxHealth);
             return;
         }
 
@@ -116,24 +109,26 @@ public class PlayerController : MonoBehaviour
 
     private void TryMove(Vector2Int targetGrid)
     {
-        Vector3Int myCell = gridManager.ground.WorldToCell(transform.position);
-        Vector2Int startGrid = new Vector2Int(myCell.x, myCell.y);
+        Vector2Int startGrid = gridManager.GetGridPos(transform.position);
 
         List<Vector2Int> path = pathfinding.FindPath(startGrid, targetGrid);
         if (path == null || path.Count == 0)
             return;
 
-        if (path.Count > movementRange)
+        if (path.Count > stats.MoveDistance)
         {
-            Debug.Log($"Move too far: required {path.Count}, max {movementRange}");
             return;
         }
+
 
         playerMenu.Moving = false;
         playerMenu.index = -1;
         gridManager.ResetAllGroundTileColors();
         viewing = false;
-        StartCoroutine(MoveAndEndTurn(path));
+        
+        stateMachine.movementPath = path;
+        stateMachine.currentState = CharacterState.Moving;
+        hasMoved = true;
     }
 
     private void TryAttack()
@@ -145,15 +140,16 @@ public class PlayerController : MonoBehaviour
             playerMenu.gameObject.SetActive(true);
             viewing = false;
             attacking = false;
-            ViewMove();
+            ViewMove();// maybe remove
+            return; // maybe remove
         }
 
         if (!attackMenu.done) return;
 
-        Vector3Int myCell3D = gridManager.ground.WorldToCell(transform.position);
-        Vector2Int unitGrid = new Vector2Int(myCell3D.x, myCell3D.y);
+        Vector2Int unitGrid = gridManager.GetGridPos(transform.position);
         
         List<Vector2Int> targetCells = new List<Vector2Int>();
+
         foreach (Vector2Int v in stats.attackGrid)
         {
             Vector2Int targetGrid = Vector2Int.zero;
@@ -174,21 +170,17 @@ public class PlayerController : MonoBehaviour
                 targetGrid = new Vector2Int(-v.y, v.x);
             }
 
-            Vector2Int targetCell = unitGrid + targetGrid;
-            Debug.Log("ug: " + unitGrid + "tg: " + targetGrid + " = " + targetCell);
-            targetCells.Add(targetCell);
+           targetCells.Add(unitGrid + targetGrid);
         }
-        Debug.Log(targetCells.Count);
-        Debug.Log(String.Join("\n", targetCells));
 
         foreach (GameObject enemy in GameObject.FindGameObjectsWithTag("Enemy"))
         {
-            Vector3Int eCell3D = gridManager.ground.WorldToCell(enemy.transform.position);
-            Vector2Int eGrid = new Vector2Int(eCell3D.x, eCell3D.y);
+            Vector2Int eGrid = gridManager.GetGridPos(enemy.transform.position);
 
             if (targetCells.Contains(eGrid))
             {
-                combat.TryAttack(enemy.gameObject);
+                stateMachine.attackTarget = enemy;
+                stateMachine.currentState = CharacterState.Attacking;
                 continue;
             }
         }
@@ -200,18 +192,10 @@ public class PlayerController : MonoBehaviour
         attackMenu.done = false;
     }
 
-    private IEnumerator MoveAndEndTurn(List<Vector2Int> path)
-    {
-        yield return StartCoroutine(mover.MoveAlongPath(path));
-        hasMoved = true;
-    }
-
     private void ViewMove()
     {
         gridManager.ResetAllGroundTileColors();
-
-        Vector3Int myCell = gridManager.ground.WorldToCell(transform.position);
-        Vector2Int myGrid = new Vector2Int(myCell.x, myCell.y);
+        Vector2Int myGrid = gridManager.GetGridPos(transform.position);
 
         BoundsInt bounds = gridManager.ground.cellBounds;
         for (int x = bounds.xMin; x < bounds.xMax; x++)
@@ -219,19 +203,17 @@ public class PlayerController : MonoBehaviour
             for (int y = bounds.yMin; y < bounds.yMax; y++)
             {
                 Vector2Int cell = new Vector2Int(x, y);
+                Vector3Int tile = new Vector3Int(x, y, 0);
 
-                Vector3Int cell3 = new Vector3Int(x, y, 0);
-                if (!gridManager.ground.HasTile(cell3))
+                if (!gridManager.ground.HasTile(tile))
                     continue;
 
                 List<Vector2Int> path = pathfinding.FindPath(myGrid, cell);
                 if (path == null || path.Count == 0)
                     continue;
 
-                if (path.Count <= movementRange)
-                {
+                if (path.Count <= stats.MoveDistance)
                     gridManager.SetGroundTileColor(cell, new Color(0f, 0f, 1f));
-                }
             }
         }
         viewing = true;

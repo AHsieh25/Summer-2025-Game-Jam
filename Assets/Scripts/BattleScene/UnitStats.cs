@@ -1,127 +1,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UnitStats : MonoBehaviour
+[CreateAssetMenu(fileName = "New Unit Stats", menuName = "Units/Unit Stats")]
+public class UnitStats : ScriptableObject
 {
-    public UnitStatsData data;
 
-    [SerializeField] private bool isMunc = false;
-
-    public int currentHealth;
-    [SerializeField] public int maxHealth;
-    [SerializeField] public int attackPower;
-    [SerializeField] public int moveDistance;
-    [SerializeField] public int attackDistance;
-    [SerializeField] public List<Vector2Int> attackGrid = new List<Vector2Int>();
-
-    [HideInInspector] public string weaponName = "";
-
-    private SaveData sd;
-    private int weaponType = -1;
-
-    void Awake()
-    {
-        sd = gameObject.AddComponent<SaveData>();
-        if (isMunc)
-        {
-            sd.LoadPlayerData();
-            weaponType = int.Parse(sd.playerData.weapon);
-
-            if (weaponType != -1)
-            {
-                ApplyWeaponStats(weaponType);
-            }
-            else
-            {
-                Debug.LogWarning("UnitStats: Unable to parse weapon type, defaulting to 0 (Sword).");
-                ApplyWeaponStats(0);
-            }
-        }
-        
-        data.maxHealth = maxHealth;
-        currentHealth = data.maxHealth;
-        data.attackPower = attackPower;
-        data.moveDistance = moveDistance;
-        data.attackDistance = attackDistance;
-        data.attackGrid = attackGrid;
-    }
-
-    private void ApplyWeaponStats(int weaponType)
-    {
-        attackGrid.Clear();
-
-        switch (weaponType)
-        {
-            case 0: // Sword
-                attackGrid.Add(new Vector2Int(0, 1));
-                attackGrid.Add(new Vector2Int(1, 1));
-                attackGrid.Add(new Vector2Int(2, 1));
-                attackGrid.Add(new Vector2Int(-1, 1));
-                attackGrid.Add(new Vector2Int(-2, 1));
-                attackPower = 25;
-                weaponName = "Sword";
-                break;
-
-            case 1: // Spear
-                attackGrid.Add(new Vector2Int(0, 1));
-                attackGrid.Add(new Vector2Int(0, 2));
-                attackGrid.Add(new Vector2Int(0, 3));
-                attackGrid.Add(new Vector2Int(0, 4));
-                attackGrid.Add(new Vector2Int(0, 5));
-                attackPower = 20;
-                weaponName = "Spear";
-                break;
-
-            case 2: // Axe
-                attackGrid.Add(new Vector2Int(0, 1));
-                attackPower = 50;
-                weaponName = "Axe";
-                break;
-
-            case 3: // Crossbow
-                attackGrid.Add(new Vector2Int(0, 10));
-                attackGrid.Add(new Vector2Int(0, 9));
-                attackPower = 30;
-                weaponName = "Crossbow";
-                break;
-
-            default:
-                Debug.LogWarning($"UnitStats: Unknown weaponType {weaponType}, defaulting to Sword.");
-                ApplyWeaponStats(0);
-                break;
-        }
-    }
-
-    public void TakeDamage(int amount)
-    {
-        currentHealth -= amount;
-        currentHealth = Mathf.Max(currentHealth, 0);
-        Debug.Log($"{name} took {amount} damage; HP now {currentHealth}/{data.maxHealth}");
-
-        if (currentHealth <= 0)
-        {
-            Die();
-        }
-    }
-
-    public void Heal(int amount)
-    {
-        currentHealth = Mathf.Min(currentHealth + amount, data.maxHealth);
-        Debug.Log($"{name} healed by {amount}; HP now {currentHealth}/{data.maxHealth}");
-    }
-
-    private void Die()
-    {
-        Debug.Log($"{name} has died.");
-
-        GridManager gm = FindFirstObjectByType<GridManager>();
-        if (gm != null)
-        {
-            Vector3Int cell = gm.ground.WorldToCell(transform.position);
-            Vector2Int gridPos = new Vector2Int(cell.x, cell.y);
-            gm.SetOccupied(gridPos, false);
-        }
-
-        Destroy(gameObject);
-    }
+    public string unitName;
+    public int maxHealth;
+    public int moveDistance;
+    public int weaponType;
+    public List<string> skills;
 }

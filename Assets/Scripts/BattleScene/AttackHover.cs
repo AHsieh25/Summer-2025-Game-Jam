@@ -6,7 +6,7 @@ using UnityEngine.Tilemaps;
 public class AttackHover : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField] private int index;
-    private UnitStats stats;
+    private StatsUpdater stats;
     [SerializeField] private GridManager gridManager;
     [SerializeField] private CurrentData cd;
     public bool hovering = false;

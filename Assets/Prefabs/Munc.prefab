@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &2704894647683399800
+--- !u!1 &5903345104221884950
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,42 +8,44 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 3836967647544321705}
-  - component: {fileID: 7408680178168193660}
-  - component: {fileID: 5398476576675751106}
-  - component: {fileID: 543499465279151589}
-  - component: {fileID: 959241400160838563}
-  - component: {fileID: 418048913432047273}
-  - component: {fileID: 4328921652203555000}
+  - component: {fileID: 4654669952055540539}
+  - component: {fileID: 6378935285972259260}
+  - component: {fileID: 8080618075927646159}
+  - component: {fileID: 5932380732280789930}
+  - component: {fileID: 4281414377694107133}
+  - component: {fileID: 82261210567871170}
+  - component: {fileID: 8370015836363336843}
+  - component: {fileID: 3590155756645064769}
+  - component: {fileID: 7761058955009392734}
   m_Layer: 0
-  m_Name: Goon
-  m_TagString: Untagged
+  m_Name: Munc
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &3836967647544321705
+--- !u!4 &4654669952055540539
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2704894647683399800}
+  m_GameObject: {fileID: 5903345104221884950}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 192, y: 192, z: 0}
-  m_LocalScale: {x: 16, y: 16, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 342.1995, y: 89.10742, z: 0}
+  m_LocalScale: {x: 96, y: 96, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &7408680178168193660
+--- !u!212 &6378935285972259260
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2704894647683399800}
+  m_GameObject: {fileID: 5903345104221884950}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -80,9 +82,9 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 8
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0.9433962, g: 0.6577339, b: 0, a: 1}
+  m_SortingOrder: 10
+  m_Sprite: {fileID: 3845494801405601191, guid: b2a06cd33ad1ba546ae1ff45b5e2c6e4, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -92,44 +94,100 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &5398476576675751106
+--- !u!114 &8080618075927646159
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2704894647683399800}
+  m_GameObject: {fileID: 5903345104221884950}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0240734b1ef24864c8ba0aa157a1ace1, type: 3}
+  m_Script: {fileID: 11500000, guid: 89f117252f4cd0c46a52fb47c3ce6e55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parent: {fileID: 0}
   gridManager: {fileID: 0}
   pathfinding: {fileID: 0}
---- !u!114 &543499465279151589
+  cd: {fileID: 0}
+  hasMoved: 0
+  playerMenu: {fileID: 0}
+  attackMenu: {fileID: 0}
+  index: 0
+--- !u!114 &5932380732280789930
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2704894647683399800}
+  m_GameObject: {fileID: 5903345104221884950}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d08c20c753e10354ba5f18124af6ecf7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isAlly: 0
   weaponName: 
-  stats: {fileID: 11400000, guid: 6473d625ca35436459ae63a31a7fe3eb, type: 2}
+  stats: {fileID: 11400000, guid: 08083e984a355f346b375d3a4d3b1968, type: 2}
   attackGrid: []
---- !u!61 &959241400160838563
+--- !u!114 &4281414377694107133
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5903345104221884950}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a45843698a6c7b2468652aff8ee75821, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerData:
+    allies: []
+    scene: 1
+--- !u!1839735485 &82261210567871170
+Tilemap:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5903345104221884950}
+  m_Enabled: 1
+  m_Tiles: {}
+  m_AnimatedTiles: {}
+  m_TileAssetArray: []
+  m_TileSpriteArray: []
+  m_TileMatrixArray: []
+  m_TileColorArray: []
+  m_TileObjectToInstantiateArray: []
+  m_AnimationFrameRate: 1
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Origin: {x: 0, y: 0, z: 0}
+  m_Size: {x: 0, y: 0, z: 1}
+  m_TileAnchor: {x: 0.5, y: 0.5, z: 0}
+  m_TileOrientation: 0
+  m_TileOrientationMatrix:
+    e00: 1
+    e01: 0
+    e02: 0
+    e03: 0
+    e10: 0
+    e11: 1
+    e12: 0
+    e13: 0
+    e20: 0
+    e21: 0
+    e22: 1
+    e23: 0
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 1
+--- !u!61 &8370015836363336843
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2704894647683399800}
+  m_GameObject: {fileID: 5903345104221884950}
   m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
@@ -161,34 +219,34 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
+    oldSize: {x: 0.2, y: 0.32}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.32, y: 0.32}
   m_EdgeRadius: 0
---- !u!114 &418048913432047273
+--- !u!114 &3590155756645064769
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2704894647683399800}
+  m_GameObject: {fileID: 5903345104221884950}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6d84e68d3c96e404b970878aecf24b8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  entityID: Goon
---- !u!114 &4328921652203555000
+  entityID: Munc
+--- !u!114 &7761058955009392734
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2704894647683399800}
+  m_GameObject: {fileID: 5903345104221884950}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 43faeb77027cb0b439db277ee30ce1f9, type: 3}

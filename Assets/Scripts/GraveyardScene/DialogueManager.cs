@@ -35,7 +35,6 @@ public class DialogueManager : MonoBehaviour
     private bool dialoguePlaying = false;
 
     [SerializeField] private SaveData sd;
-    public string currentSceneName;
     public string nextSceneName;
 
     private void Update()
@@ -47,8 +46,8 @@ public class DialogueManager : MonoBehaviour
     {
         dialogueKnotName = DialogueState.CurrentKnotName;
         sd = gameObject.AddComponent<SaveData>();
-        sd.playerData.scene = currentSceneName;
-        sd.SavePlayerData();
+        sd.LoadPlayerData();
+        sd.SavePlayerData(null, null);
         audioSource = narratorSound;
         story = new Story(inkJSON.text);
         EnterDialogue(dialogueKnotName);

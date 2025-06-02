@@ -8,5 +8,5 @@ public class CurrentData : MonoBehaviour
 [System.Serializable]
 public class currentData
 {
-    public UnitStats stats;
+    public StatsUpdater stats;
 }

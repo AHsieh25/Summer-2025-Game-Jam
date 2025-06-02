@@ -18,7 +18,6 @@ public class LoadoutUI : MonoBehaviour
     {
         sd = gameObject.AddComponent<SaveData>();
         sd.LoadPlayerData();
-        sd.playerData.scene = "LoadoutScene";
         if (hasSpear)
         {
             spearButton.gameObject.SetActive(true);
@@ -33,31 +32,35 @@ public class LoadoutUI : MonoBehaviour
         }
     }
 
-    public void SwordButton()
+    public void SetLoadout(string weaponID)
     {
-        sd.playerData.weapon = "0";
-        sd.SavePlayerData();
+        string playerName = "Munc";
+
+        AllyData existing = sd.playerData.allies.Find(a => a.name == playerName);
+
+        if (existing == null)
+        {
+            // If not found, create a new entry
+            existing = new AllyData
+            {
+                name = playerName,
+                weaponType = weaponID
+            };
+            sd.playerData.allies.Add(existing);
+        }
+        else
+        {
+            existing.weaponType = weaponID;
+        }
+
+        // Set the scene and save
+        sd.SavePlayerData(playerName, weaponID);
+
         SceneManager.LoadScene(newSceneName);
     }
 
-    public void SpearButton()
-    {
-        sd.playerData.weapon = "1";
-        sd.SavePlayerData();
-        SceneManager.LoadScene(newSceneName);
-    }
-
-    public void AxeButton()
-    {
-        sd.playerData.weapon = "2";
-        sd.SavePlayerData();
-        SceneManager.LoadScene(newSceneName);
-    }
-
-    public void CrossbowButton()
-    {
-        sd.playerData.weapon = "3";
-        sd.SavePlayerData();
-        SceneManager.LoadScene(newSceneName);
-    }
+    public void SwordButton() => SetLoadout("0");
+    public void SpearButton() => SetLoadout("1");
+    public void AxeButton() => SetLoadout("2");
+    public void CrossbowButton() => SetLoadout("3");
 }
