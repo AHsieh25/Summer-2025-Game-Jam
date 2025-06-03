@@ -15,5 +15,5 @@ MonoBehaviour:
   unitName: Goon
   maxHealth: 50
   moveDistance: 5
-  weaponType: 0
+  weaponType: 8
   skills: []

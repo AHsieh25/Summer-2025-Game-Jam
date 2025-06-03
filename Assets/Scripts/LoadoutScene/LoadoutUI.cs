@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 
 public class LoadoutUI : MonoBehaviour
 {
-    [SerializeField] private string sceneName;
+    private static int battleNum;
     public Button spearButton;
     public Button axeButton;
     public Button crossbowButton;
@@ -26,7 +26,7 @@ public class LoadoutUI : MonoBehaviour
         {
             axeButton.gameObject.SetActive(true);
         }
-        if (hasCrossbow)
+        if (hasCrossbow) 
         {
             crossbowButton.gameObject.SetActive(true);
         }

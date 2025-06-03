@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitName: Banshee
   maxHealth: 75
-  moveDistance: 5
+  moveDistance: 10
   weaponType: 5
   skills: []

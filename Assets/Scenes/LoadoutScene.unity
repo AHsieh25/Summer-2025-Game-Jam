@@ -371,7 +371,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fac96121126437e40ab0c49df12a53c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneName: BattleScene
   spearButton: {fileID: 1498965971}
   axeButton: {fileID: 227866153}
   crossbowButton: {fileID: 1836089416}

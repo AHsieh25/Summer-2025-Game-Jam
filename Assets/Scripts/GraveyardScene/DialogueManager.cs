@@ -102,9 +102,6 @@ public class DialogueManager : MonoBehaviour
         dialoguePlaying = false;
         textBox.SetActive(false);
         profileImage.SetActive(false);
-
-        
-
         SceneManager.LoadScene(nextSceneName);
     }
 
@@ -131,7 +128,6 @@ public class DialogueManager : MonoBehaviour
         // Hide both
         profileImage.SetActive(false);
 
-        // Show only the one we want
         if (who == "Gravekeeper")
         {
             profileImage = gkProfile;

@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 89ac5ce490c110f4c8ffd16de37ac446, type: 3}
-  m_Name: MuncStats
+  m_Name: EvilGravekeeperStats
   m_EditorClassIdentifier: 
-  unitName: Munc
-  maxHealth: 100
-  moveDistance: 7
-  weaponType: 0
+  unitName: EvilGravekeeper
+  maxHealth: 150
+  moveDistance: 3
+  weaponType: 4
   skills: []
