@@ -17,5 +17,4 @@ MonoBehaviour:
   moveDistance: 5
   weaponType: 6
   maxMana: 50
-  skills:
-  - {fileID: 11400000, guid: 60dfc7d9101f8044f868c99f2fa4e048, type: 2}
+  skills: []
