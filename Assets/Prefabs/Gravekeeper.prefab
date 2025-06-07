@@ -126,7 +126,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponName: 
-  stats: {fileID: 11400000, guid: 08083e984a355f346b375d3a4d3b1968, type: 2}
+  stats: {fileID: 11400000, guid: 8d8f41b5a205305479b6bfb043b7c86b, type: 2}
+  gridManager: {fileID: 0}
   attackGrid: []
 --- !u!114 &4281414377694107133
 MonoBehaviour:
@@ -255,5 +256,8 @@ MonoBehaviour:
   currentState: 0
   movementPath: []
   attackTarget: {fileID: 0}
+  currentSkill: {fileID: 0}
+  skillTarget: {fileID: 0}
+  skillDirection: 0
   stateRunning: 0
   moveSpeed: 200

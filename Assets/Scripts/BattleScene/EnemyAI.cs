@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements.Experimental;
+using static UnityEngine.Rendering.DebugUI;
 
 enum Facing { Up, Right, Down, Left }
 
@@ -14,31 +16,32 @@ public class EnemyAI : MonoBehaviour
 
     private CharacterStateMachine stateMachine;
     private StatsUpdater stats;
-
+    public HashSet<Vector2Int> reservedTiles;
     void Awake()
     {
         stateMachine = GetComponent<CharacterStateMachine>();
-        stats = GetComponent<StatsUpdater>(); 
+        stats = GetComponent<StatsUpdater>();
+        reservedTiles = new HashSet<Vector2Int>();
     }
 
     // Enemy attacks if player is in attack grid, otherwise, moves towards closest player and attacks if player is in attack grid
-    public IEnumerator TakeTurnCoroutine()
+    public IEnumerator TakeTurn()
     {
-        Debug.Log("Enemy start state is " + stateMachine.currentState);
-        // Skip turn if stunned
-        if (stateMachine.currentState == CharacterState.Stunned)
+        if (!stats.CanAct)
         {
-            Debug.Log("Enemy state is " + stateMachine.currentState);
             yield break;
         }
-            
-        // Tries to attack a player in range
+
+        yield return StartCoroutine(TryUseRandomSkill());
+        if (stateMachine.skillSuccess)
+        {
+            yield break;
+        }
+
         if (TryAttack())
         {
-            Debug.Log("Enemy state is " + stateMachine.currentState);
             yield break;
         }
-            
 
         // Finds closest player to move towards
         Transform closestPlayer = FindClosestPlayer();
@@ -49,58 +52,100 @@ public class EnemyAI : MonoBehaviour
         Vector2Int startGrid = gridManager.GetGridPos(transform.position);
         Vector2Int playerGrid = gridManager.GetGridPos(closestPlayer.position);
 
-        Vector2Int[] dirs = {
-            Vector2Int.up, Vector2Int.right,
-            Vector2Int.down, Vector2Int.left
-        };
+        List<Vector2Int> bestPath = FindBestPathToAdjacentCell(startGrid, playerGrid);
+        if (bestPath == null || bestPath.Count == 0)
+            yield break;
+
+        int steps = Mathf.Min(stats.MoveDistance, bestPath.Count);
+        List<Vector2Int> limitedPath = bestPath.GetRange(0, steps);
+
+        stateMachine.movementPath = limitedPath;
+        stateMachine.currentState = CharacterState.Moving;
+        yield return null;
+
+        while (!stateMachine.stateRunning)
+            yield return null;
+
+        while (stateMachine.stateRunning)
+            yield return null;
+
+        // Tries to attack player in range
+        yield return StartCoroutine(TryUseRandomSkill());
+        if (stateMachine.skillSuccess)
+        {
+            yield break;
+        }
+
+        if (TryAttack())
+        {
+            yield break;
+        }
+    }
+
+    private IEnumerator TryUseRandomSkill()
+    {
+        Debug.Log("Trying random skill");
+        if (stats.Skills == null || stats.Skills.Count == 0)
+        {
+            Debug.Log("no skills to try");
+            yield break;
+        }
+
+        var usableSkills = stats.Skills
+            .Where(s => s.CanUse(stats))
+            .OrderBy(_ => Random.value)
+            .ToList();
+
+        if (usableSkills.Count == 0)
+        {
+            Debug.Log("no usable skills (out of mana or on cooldown)");
+            yield break;
+        }
+
+        // Pick the first random one
+
+        var skillInstance = usableSkills[0];
+        Debug.Log(skillInstance.baseSkill.name);
+
+        stateMachine.skillSuccess = false;
+        stateMachine.currentSkill = skillInstance;
+        stateMachine.currentState = CharacterState.UsingSkill;
+
+        yield return null;
+
+        // Wait for the skill to finish
+        while (stateMachine.stateRunning)
+            yield return null;
+
+        if (stateMachine.skillSuccess)
+            Debug.Log("Skill succeeded!");
+        else
+            Debug.Log("Skill failed or hit nothing.");
+    }
+
+    private List<Vector2Int> FindBestPathToAdjacentCell(Vector2Int start, Vector2Int targetCenter)
+    {
+        Vector2Int[] dirs = { Vector2Int.up, Vector2Int.right, Vector2Int.down, Vector2Int.left };
 
         List<Vector2Int> bestPath = null;
         int bestLength = int.MaxValue;
 
-        foreach (var d in dirs)
+        foreach (var dir in dirs)
         {
-            Vector2Int target = playerGrid + d;
-
-            Vector3Int tCell = new Vector3Int(target.x, target.y, 0);
-            if (!gridManager.ground.HasTile(tCell))
+            Vector2Int target = targetCenter + dir;
+            Vector3Int cell = (Vector3Int)target;
+            if (!gridManager.ground.HasTile(cell) || gridManager.obstacles.HasTile(cell) || gridManager.IsOccupied(target))
                 continue;
 
-            if (gridManager.obstacles.HasTile(tCell))
-                continue;
-
-            if (gridManager.IsOccupied(target))
-                continue;
-
-            List<Vector2Int> path = pathfinding.FindPath(startGrid, target);
-            if (path != null && path.Count > 0 && path.Count < bestLength)
+            List<Vector2Int> path = pathfinding.FindPath(start, target);
+            if (path != null && path.Count < bestLength)
             {
                 bestPath = path;
                 bestLength = path.Count;
             }
         }
 
-        if (bestPath == null)
-        {
-            yield break;
-        }
-
-        int steps = Mathf.Min(stats.MoveDistance, bestPath.Count);
-        List<Vector2Int> limitedPath = bestPath.GetRange(0, steps);
-        Debug.Log($"[{name}] Computed limitedPath. Count = {limitedPath.Count}");
-
-        stateMachine.movementPath = limitedPath;
-        stateMachine.currentState = CharacterState.Moving;
-        Debug.Log("Enemy state is " + stateMachine.currentState);
-
-        while (stateMachine.stateRunning)
-            yield return null;
-
-        // Tries to attack player in range
-        if (TryAttack())
-        {
-            Debug.Log("Enemy state is " + stateMachine.currentState);
-            yield break;
-        }
+        return bestPath;
     }
 
     private Transform FindClosestPlayer()
@@ -186,6 +231,7 @@ public class EnemyAI : MonoBehaviour
 
                 if (pGrid == targetGrid)
                 {
+                    Debug.Log("Executing attack on: " + player.GetComponent<StatsUpdater>().name + " for " + stats.AttackPower);
                     stateMachine.attackTarget = player.gameObject;
                     stateMachine.currentState = CharacterState.Attacking;
                     // Found a player in one of our attack offsets—attack immediately

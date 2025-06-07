@@ -9,11 +9,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 89ac5ce490c110f4c8ffd16de37ac446, type: 3}
+  m_Script: {fileID: 11500000, guid: 3aa71e00a54696b419ba0e60f20091a0, type: 3}
   m_Name: MuncStats
   m_EditorClassIdentifier: 
   unitName: Munc
   maxHealth: 100
   moveDistance: 7
   weaponType: 0
-  skills: []
+  maxMana: 100
+  skills:
+  - {fileID: 11400000, guid: c31a59e9eaaf54a46837c315ee8122c3, type: 2}
+  - {fileID: 11400000, guid: c06716c0798d34a48b9be812f36d2a8c, type: 2}
+  - {fileID: 11400000, guid: 927a0cb42e7511d4f82bf5658eb1c49b, type: 2}
+  - {fileID: 11400000, guid: 16415ece4a775cf4692050512b18977a, type: 2}

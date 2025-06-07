@@ -32,7 +32,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 192, y: 192, z: 0}
-  m_LocalScale: {x: 16, y: 16, z: 1}
+  m_LocalScale: {x: 32, y: 32, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -120,7 +120,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponName: 
-  stats: {fileID: 11400000, guid: 6473d625ca35436459ae63a31a7fe3eb, type: 2}
+  stats: {fileID: 11400000, guid: e62526eea9c2bee4abd2fc4412c14c2e, type: 2}
+  gridManager: {fileID: 0}
   attackGrid: []
 --- !u!61 &959241400160838563
 BoxCollider2D:
@@ -196,5 +197,8 @@ MonoBehaviour:
   currentState: 0
   movementPath: []
   attackTarget: {fileID: 0}
+  currentSkill: {fileID: 0}
+  skillTarget: {fileID: 0}
+  skillDirection: 0
   stateRunning: 0
   moveSpeed: 200

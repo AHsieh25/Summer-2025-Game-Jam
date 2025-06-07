@@ -120,7 +120,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponName: 
-  stats: {fileID: 11400000, guid: 6473d625ca35436459ae63a31a7fe3eb, type: 2}
+  stats: {fileID: 11400000, guid: 4c447bf04b2979b4495524325176bfaa, type: 2}
+  gridManager: {fileID: 0}
   attackGrid: []
 --- !u!61 &959241400160838563
 BoxCollider2D:
@@ -196,5 +197,8 @@ MonoBehaviour:
   currentState: 0
   movementPath: []
   attackTarget: {fileID: 0}
+  currentSkill: {fileID: 0}
+  skillTarget: {fileID: 0}
+  skillDirection: 0
   stateRunning: 0
   moveSpeed: 200

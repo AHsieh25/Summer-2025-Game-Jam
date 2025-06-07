@@ -8,6 +8,8 @@ public class PlayerMenu : MonoBehaviour
 {
     public bool Moving { get; set; }
     public bool Attacking { get; set; }
+    public bool UsingSkill { get; set; }
+
     public int index = -1;
 
     [SerializeField] private Text Attack;
@@ -15,6 +17,8 @@ public class PlayerMenu : MonoBehaviour
     [SerializeField] private Text Health;
     [SerializeField] private Button attackButton;
     [SerializeField] private Button moveButton;
+    [SerializeField] private Button endButton;
+    [SerializeField] private TurnManager turnManager;
 
     public void Setup(int i, int attack, int move, int currentHealth, int maxHealth, string weaponName)
     {
@@ -50,9 +54,25 @@ public class PlayerMenu : MonoBehaviour
         Moving = false;
         gameObject.SetActive(false);
     }
+
+    public void SkillsButton()
+    {
+        UsingSkill = true;
+        Moving = false;
+        gameObject.SetActive(false);
+    }
+
     public void BackButton()
     {
         gameObject.SetActive(false);
         index = -1;
+    }
+
+    public void EndButton()
+    {
+        Moving = false;
+        Attacking = false;
+        turnManager.skipPlayerActions = true;
+        gameObject.SetActive(false);
     }
 }

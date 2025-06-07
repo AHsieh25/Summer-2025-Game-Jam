@@ -9,11 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 89ac5ce490c110f4c8ffd16de37ac446, type: 3}
+  m_Script: {fileID: 11500000, guid: 3aa71e00a54696b419ba0e60f20091a0, type: 3}
   m_Name: BansheeStats
   m_EditorClassIdentifier: 
   unitName: Banshee
   maxHealth: 75
   moveDistance: 10
   weaponType: 5
-  skills: []
+  maxMana: 150
+  skills:
+  - {fileID: 11400000, guid: 9419e44b81f683741980a8ec2b746d64, type: 2}
