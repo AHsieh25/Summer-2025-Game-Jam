@@ -67,7 +67,7 @@ public class GridManager : MonoBehaviour
     public GameObject GetUnitAt(Vector2Int gridPos)
     {
         unitMap.TryGetValue(gridPos, out var unit);
-        Debug.Log("Value of unit: " + unit);
+        Debug.Log("Value of unit: " + unit + " at " + gridPos);
         return unit;
     }
 }

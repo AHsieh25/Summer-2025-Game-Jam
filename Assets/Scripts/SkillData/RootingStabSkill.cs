@@ -6,7 +6,7 @@ public class RootingStabSkill : Skill
 {
     private static readonly List<Vector2Int> baseOffsets = new()
     {
-        new Vector2Int(0, 1), new Vector2Int(0, 2), new Vector2Int(1, 3),
+        new Vector2Int(0, 1), new Vector2Int(0, 2), new Vector2Int(0, 3),
         new Vector2Int(0, 4), new Vector2Int(0, 5),
     };
 

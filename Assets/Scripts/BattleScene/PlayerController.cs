@@ -46,10 +46,10 @@ public class PlayerController : MonoBehaviour
             // If they hit “Back,” bail out and re-open the main menu
             if (skillMenu.back)
             {
-                skillMenu.back = false;
+                skillMenu.Cancel();
                 playerMenu.UsingSkill = false;
                 playerMenu.gameObject.SetActive(true);
-                viewing = false;
+                viewing = true;
                 return;
             }
 
@@ -59,9 +59,8 @@ public class PlayerController : MonoBehaviour
 
             // They clicked a skill button → perform it
             int idx = skillMenu.selectedSkillIndex;
-            skillMenu.done = false;
+            skillMenu.Cancel();
             playerMenu.UsingSkill = false;
-
             TryUseSkill(idx);
             return;
         }
@@ -145,6 +144,8 @@ public class PlayerController : MonoBehaviour
 
     private void TryMove(Vector2Int targetGrid)
     {
+        if (!stats.CanMove) return;
+
         Vector2Int startGrid = gridManager.GetGridPos(transform.position);
 
         List<Vector2Int> path = pathfinding.FindPath(startGrid, targetGrid);
@@ -169,11 +170,6 @@ public class PlayerController : MonoBehaviour
 
     private void TryUseSkill(int skillIdx)
     {
-        skillMenu.Cancel();
-        playerMenu.gameObject.SetActive(false);
-        gridManager.ResetAllGroundTileColors();
-        viewing = false;
-
         // grab the SkillInstance
         var inst = stats.Skills[skillIdx];
         if (!inst.CanUse(stats))

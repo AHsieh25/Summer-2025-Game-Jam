@@ -16,6 +16,7 @@ public class LargeSlashSkill : Skill
 
     public override bool Execute(StatsUpdater user, StatsUpdater target = null)
     {
+        Debug.Log("Trying Slash skill");
         bool didHit = false;
         GridManager gm = user.gridManager;
         Vector2Int userGrid = gm.GetGridPos(user.transform.position);
@@ -71,6 +72,7 @@ public class LargeSlashSkill : Skill
             user.ConsumeMana(manaCost);
             user.SetCooldown();
         }
+        Debug.Log("Trying Slash skill: " + didHit);
         return didHit;
     }
 }

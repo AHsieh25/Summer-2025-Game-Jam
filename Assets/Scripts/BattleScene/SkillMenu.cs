@@ -34,8 +34,6 @@ public class SkillMenu : MonoBehaviour
             {
                 selectedSkillIndex = index;
                 done = true;
-                UsingSkill = false;
-                gameObject.SetActive(false);
             });
             _buttons.Add(go.GetComponent<Button>());
         }
@@ -45,15 +43,11 @@ public class SkillMenu : MonoBehaviour
         backGo.GetComponent<Button>().onClick.AddListener(() =>
         {
             back = true;
-            UsingSkill = false;
-            done = false;
-            selectedSkillIndex = -1;
-            gameObject.SetActive(false);
-            Cancel();
         });
-        _buttons.Add(backGo.GetComponent<Button>());
 
+        _buttons.Add(backGo.GetComponent<Button>());
         done = false;
+        back = false;
         selectedSkillIndex = -1;
         UsingSkill = true;
         gameObject.SetActive(true);
@@ -62,6 +56,7 @@ public class SkillMenu : MonoBehaviour
     public void Cancel()
     {
         done = false;
+        back = false;
         UsingSkill = false;
         selectedSkillIndex = -1;
         gameObject.SetActive(false);

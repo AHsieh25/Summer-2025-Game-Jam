@@ -73,11 +73,6 @@ public class CharacterStateMachine : MonoBehaviour
                 break;
             case CharacterState.Moving:
                 // Move character
-                if (!stats.CanMove)
-                {
-                    currentState = CharacterState.Idle;
-                    return;
-                }
                 if (movementPath != null && movementPath.Count > 0)
                 {
                     Debug.Log($"[{name}] Starting MoveAlongPath with {movementPath.Count} steps.");

@@ -43,42 +43,45 @@ public class EnemyAI : MonoBehaviour
             yield break;
         }
 
-        // Finds closest player to move towards
-        Transform closestPlayer = FindClosestPlayer();
-        if (closestPlayer == null)
-            yield break;
+        if (stats.CanMove)
+        {
+            // Finds closest player to move towards
+            Transform closestPlayer = FindClosestPlayer();
+            if (closestPlayer == null)
+                yield break;
 
-        // Set grid positions of enemy and player
-        Vector2Int startGrid = gridManager.GetGridPos(transform.position);
-        Vector2Int playerGrid = gridManager.GetGridPos(closestPlayer.position);
+            // Set grid positions of enemy and player
+            Vector2Int startGrid = gridManager.GetGridPos(transform.position);
+            Vector2Int playerGrid = gridManager.GetGridPos(closestPlayer.position);
 
-        List<Vector2Int> bestPath = FindBestPathToAdjacentCell(startGrid, playerGrid);
-        if (bestPath == null || bestPath.Count == 0)
-            yield break;
+            List<Vector2Int> bestPath = FindBestPathToAdjacentCell(startGrid, playerGrid);
+            if (bestPath == null || bestPath.Count == 0)
+                yield break;
 
-        int steps = Mathf.Min(stats.MoveDistance, bestPath.Count);
-        List<Vector2Int> limitedPath = bestPath.GetRange(0, steps);
+            int steps = Mathf.Min(stats.MoveDistance, bestPath.Count);
+            List<Vector2Int> limitedPath = bestPath.GetRange(0, steps);
 
-        stateMachine.movementPath = limitedPath;
-        stateMachine.currentState = CharacterState.Moving;
-        yield return null;
-
-        while (!stateMachine.stateRunning)
+            stateMachine.movementPath = limitedPath;
+            stateMachine.currentState = CharacterState.Moving;
             yield return null;
 
-        while (stateMachine.stateRunning)
-            yield return null;
+            while (!stateMachine.stateRunning)
+                yield return null;
 
-        // Tries to attack player in range
-        yield return StartCoroutine(TryUseRandomSkill());
-        if (stateMachine.skillSuccess)
-        {
-            yield break;
-        }
+            while (stateMachine.stateRunning)
+                yield return null;
 
-        if (TryAttack())
-        {
-            yield break;
+            // Tries to attack player in range
+            yield return StartCoroutine(TryUseRandomSkill());
+            if (stateMachine.skillSuccess)
+            {
+                yield break;
+            }
+
+            if (TryAttack())
+            {
+                yield break;
+            }
         }
     }
 
