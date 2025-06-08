@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 91034b2f86bb01342bcdae14a02300c1
+guid: 96fbcd7af97935146849a8b648899933
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -102,7 +102,7 @@ ScriptedImporter:
     generateIndividualEvents: 1
     generateSpriteAtlas: 1
   importFileNodeState: 1
-  platformSettingsDirtyTick: 638850066407604849
+  platformSettingsDirtyTick: 638850069572113511
   textureAssetName: 
   singleSpriteImportData:
   - name: 
@@ -127,19 +127,19 @@ ScriptedImporter:
     tessellationDetail: 0
     uvTransform: {x: 0, y: 0}
   animatedSpriteImportData:
-  - name: witch sprite left
+  - name: goon sprite left
     originalName: 
-    pivot: {x: 0.5, y: 0.5}
-    alignment: 0
+    pivot: {x: 0.5, y: 0}
+    alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     customData: 
     rect:
       serializedVersion: 2
       x: 4
       y: 4
-      width: 32
-      height: 32
-    spriteID: 12f00eba90af55f458b64fa852911271
+      width: 24
+      height: 29
+    spriteID: 062f9fa0755279448b464ba0cae056be
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -153,25 +153,25 @@ ScriptedImporter:
   asepriteLayers:
   - layerIndex: 0
     uuid:
-      value0: 4016858151
+      value0: 1904450619
       value1: 0
       value2: 0
       value3: 0
     guid: 0
-    name: witch sprite left
+    name: goon sprite left
     layerFlags: 0
     layerType: 0
     blendMode: 0
     cells:
-    - name: witch sprite left
+    - name: goon sprite left
       frameIndex: 0
       additiveSortOrder: 0
       cellRect:
-        x: 0
+        x: 4
         y: 0
-        width: 32
-        height: 32
-      spriteId: 12f00eba90af55f458b64fa852911271
+        width: 24
+        height: 29
+      spriteId: 062f9fa0755279448b464ba0cae056be
     linkedCells: []
     tileCells: []
     tileSetIndex: 0
@@ -230,4 +230,4 @@ ScriptedImporter:
   secondarySpriteTextures: []
   spritePackingTag: 
   canvasSize: {x: 32, y: 32}
-  previousTextureSize: {x: 64, y: 64}
+  previousTextureSize: {x: 32, y: 64}

@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 91034b2f86bb01342bcdae14a02300c1
+guid: 402ee6f7a4e97444aba8cdce7ea39b8d
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -102,7 +102,7 @@ ScriptedImporter:
     generateIndividualEvents: 1
     generateSpriteAtlas: 1
   importFileNodeState: 1
-  platformSettingsDirtyTick: 638850066407604849
+  platformSettingsDirtyTick: 638850069610413684
   textureAssetName: 
   singleSpriteImportData:
   - name: 
@@ -127,19 +127,19 @@ ScriptedImporter:
     tessellationDetail: 0
     uvTransform: {x: 0, y: 0}
   animatedSpriteImportData:
-  - name: witch sprite left
+  - name: goon sprite up
     originalName: 
-    pivot: {x: 0.5, y: 0.5}
-    alignment: 0
+    pivot: {x: 0.516129, y: 0}
+    alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     customData: 
     rect:
       serializedVersion: 2
       x: 4
       y: 4
-      width: 32
-      height: 32
-    spriteID: 12f00eba90af55f458b64fa852911271
+      width: 31
+      height: 28
+    spriteID: 9f384dfc99fb2074fae98e4beb21a650
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -153,25 +153,25 @@ ScriptedImporter:
   asepriteLayers:
   - layerIndex: 0
     uuid:
-      value0: 4016858151
+      value0: 3527975273
       value1: 0
       value2: 0
       value3: 0
     guid: 0
-    name: witch sprite left
+    name: goon sprite up
     layerFlags: 0
     layerType: 0
     blendMode: 0
     cells:
-    - name: witch sprite left
+    - name: goon sprite up
       frameIndex: 0
       additiveSortOrder: 0
       cellRect:
         x: 0
         y: 0
-        width: 32
-        height: 32
-      spriteId: 12f00eba90af55f458b64fa852911271
+        width: 31
+        height: 28
+      spriteId: 9f384dfc99fb2074fae98e4beb21a650
     linkedCells: []
     tileCells: []
     tileSetIndex: 0

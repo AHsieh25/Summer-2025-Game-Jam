@@ -34,7 +34,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 342.1995, y: 89.10742, z: 0}
-  m_LocalScale: {x: 96, y: 96, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -112,6 +112,7 @@ MonoBehaviour:
   hasMoved: 0
   playerMenu: {fileID: 0}
   attackMenu: {fileID: 0}
+  skillMenu: {fileID: 0}
   index: 0
 --- !u!114 &5932380732280789930
 MonoBehaviour:
@@ -127,6 +128,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponName: 
   stats: {fileID: 11400000, guid: 08083e984a355f346b375d3a4d3b1968, type: 2}
+  gridManager: {fileID: 0}
   attackGrid: []
 --- !u!114 &4281414377694107133
 MonoBehaviour:
@@ -255,5 +257,7 @@ MonoBehaviour:
   currentState: 0
   movementPath: []
   attackTarget: {fileID: 0}
+  skillTarget: {fileID: 0}
+  skillSuccess: 0
   stateRunning: 0
   moveSpeed: 200

@@ -4441,12 +4441,20 @@ PrefabInstance:
       value: EvilGravekeeper
       objectReference: {fileID: 0}
     - target: {fileID: 3836967647544321705, guid: 5348dacbb86d7be4e849dda260f68fe3, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3836967647544321705, guid: 5348dacbb86d7be4e849dda260f68fe3, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3836967647544321705, guid: 5348dacbb86d7be4e849dda260f68fe3, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 648.56445
+      value: 649.06445
       objectReference: {fileID: 0}
     - target: {fileID: 3836967647544321705, guid: 5348dacbb86d7be4e849dda260f68fe3, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 212.5978
+      value: 165.3478
       objectReference: {fileID: 0}
     - target: {fileID: 3836967647544321705, guid: 5348dacbb86d7be4e849dda260f68fe3, type: 3}
       propertyPath: m_LocalPosition.z
@@ -4492,6 +4500,10 @@ PrefabInstance:
       propertyPath: pathfinding
       value: 
       objectReference: {fileID: 717817917}
+    - target: {fileID: 7408680178168193660, guid: 5348dacbb86d7be4e849dda260f68fe3, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 4015461854712271067, guid: 34fed0c11f9aa1c47a55b959b984a3f6, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
