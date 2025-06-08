@@ -38,6 +38,10 @@ public class TurnManager : MonoBehaviour
     {
         while (true)
         {
+            if (SceneManager.GetActiveScene().name.Equals("Level2") && GameObject.FindGameObjectsWithTag("Player").Length == 0)
+            {
+                SceneManager.LoadScene(nextSceneName);
+            }
 
             // —— PLAYER TURN ——
             skipPlayerActions = false;

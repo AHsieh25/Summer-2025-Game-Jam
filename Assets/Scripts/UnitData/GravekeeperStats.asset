@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: GravekeeperStats
   m_EditorClassIdentifier: 
   unitName: Gravekeeper
-  maxHealth: 150
+  maxHealth: 100
   moveDistance: 3
   weaponType: 4
   maxMana: 50
