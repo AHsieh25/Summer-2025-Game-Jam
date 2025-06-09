@@ -305,7 +305,7 @@ MonoBehaviour:
   bansheeProfile: {fileID: 1959688718}
   witchProfile: {fileID: 1296884493}
   profileImage: {fileID: 1633008846}
-  inkJSON: {fileID: 4900000, guid: c7f38aedd5756ef4188606935cb5d825, type: 3}
+  inkJSON: {fileID: 4900000, guid: a17eb867e7234da4c8737a9d6844fbca, type: 3}
   textBox: {fileID: 1813540547}
   dialogueText: {fileID: 76153827}
   nameText: {fileID: 2146051370}
@@ -2763,7 +2763,7 @@ AudioSource:
   m_audioClip: {fileID: 8300000, guid: f511bb5b89cf09e48bea9275cfa35b2c, type: 3}
   m_Resource: {fileID: 8300000, guid: f511bb5b89cf09e48bea9275cfa35b2c, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.3
+  m_Volume: 0.2
   m_Pitch: 1
   Loop: 0
   Mute: 0
