@@ -221,7 +221,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.2, y: 0.32}
+    oldSize: {x: 20, y: 32}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -261,3 +261,7 @@ MonoBehaviour:
   skillSuccess: 0
   stateRunning: 0
   moveSpeed: 200
+  downSprite: {fileID: 3845494801405601191, guid: b2a06cd33ad1ba546ae1ff45b5e2c6e4, type: 3}
+  upSprite: {fileID: 7728869563001965553, guid: 80227a8a3492bc2469af748327800ad5, type: 3}
+  leftSprite: {fileID: -3712281119274180961, guid: af8f66c3cf96f294bb2c3fd87f6ce0d2, type: 3}
+  rightSprite: {fileID: -4517346099792583918, guid: 7959d911f72d25a409766f1de4ca2b27, type: 3}

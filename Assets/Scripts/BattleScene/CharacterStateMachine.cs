@@ -31,7 +31,10 @@ public class CharacterStateMachine : MonoBehaviour
 
     public float moveSpeed = 200f;
 
-    //add animator object
+    public Sprite downSprite;
+    public Sprite upSprite;
+    public Sprite leftSprite;
+    public Sprite rightSprite;
 
     void Awake()
     {
@@ -106,6 +109,9 @@ public class CharacterStateMachine : MonoBehaviour
             // Figure out which Move state we’re in for animation purposes
             Vector3 worldTarget = groundTilemap.GetCellCenterWorld((Vector3Int)gridCell);
 
+            Vector2Int aa = new Vector2Int((int)transform.position.x, (int)transform.position.y);
+            changeSprite(aa - new Vector2Int((int)worldTarget.x, (int)worldTarget.y));
+
             while ((transform.position - worldTarget).sqrMagnitude > 0.001f)
             {
                 transform.position = Vector3.MoveTowards(
@@ -127,33 +133,25 @@ public class CharacterStateMachine : MonoBehaviour
         stateRunning = false;
     }
 
-    /*
-    private void AnimateStepDirection(Vector2Int step)
+    private void changeSprite(Vector2Int step)
     {
-        animator.SetBool("isMoving", true);
-
         if (step.y > 0)
         {
-            animator.SetFloat("moveX", 0f);
-            animator.SetFloat("moveY", 1f);
+            GetComponent<SpriteRenderer>().sprite = downSprite;
         }
         else if (step.y < 0)
         {
-            animator.SetFloat("moveX", 0f);
-            animator.SetFloat("moveY", -1f);
+            GetComponent<SpriteRenderer>().sprite = upSprite;
         }
         else if (step.x > 0)
         {
-            animator.SetFloat("moveX", 1f);
-            animator.SetFloat("moveY", 0f);
+            GetComponent<SpriteRenderer>().sprite = rightSprite;
         }
         else if (step.x < 0)
         {
-            animator.SetFloat("moveX", -1f);
-            animator.SetFloat("moveY", 0f);
+            GetComponent<SpriteRenderer>().sprite = leftSprite;
         }
     }
-    */
 
     private void HandleAttackState()
     {

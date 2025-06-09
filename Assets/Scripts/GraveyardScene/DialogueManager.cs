@@ -13,6 +13,8 @@ public class DialogueManager : MonoBehaviour
 
     [SerializeField] GameObject muncProfile;
     [SerializeField] GameObject gkProfile;
+    [SerializeField] GameObject bansheeProfile;
+    [SerializeField] GameObject witchProfile;
     [SerializeField] GameObject profileImage;
 
     [SerializeField] TextAsset inkJSON;
@@ -28,6 +30,9 @@ public class DialogueManager : MonoBehaviour
     [SerializeField] AudioSource muncSound;
     [SerializeField] AudioSource gkSound;
     [SerializeField] AudioSource narratorSound;
+    [SerializeField] AudioSource bansheeSound;
+    [SerializeField] AudioSource witchSound;
+    [SerializeField] AudioSource unknownSound;
     private AudioSource audioSource;
 
     private string dialogueKnotName;
@@ -82,6 +87,7 @@ public class DialogueManager : MonoBehaviour
 
         story.BindExternalFunction("setNextKnot", (string knot) => {
             DialogueState.CurrentKnotName = knot;
+            nextSceneName = knot;
         });
 
         if (!knotName.Equals(""))
@@ -134,19 +140,35 @@ public class DialogueManager : MonoBehaviour
             audioSource = gkSound;
             profileImage.SetActive(true);
         }
-        else if (who == "Munc")
+        else if (who == "Familiar")
+        {
+            profileImage = bansheeProfile;
+            audioSource = bansheeSound;
+            profileImage.SetActive(true);
+        }
+        else if (who == "Witch")
+        {
+            profileImage = witchProfile;
+            audioSource = witchSound;
+            profileImage.SetActive(true);
+        }
+        // narrator
+        else if (who == "Narrator")
+        {
+            profileImage.SetActive(false);
+            audioSource = narratorSound;
+        }
+        else if (who == "???")
+        {
+            profileImage.SetActive(false);
+            audioSource = unknownSound;
+        }
+        else
         {
             profileImage = muncProfile;
             audioSource = muncSound;
             profileImage.SetActive(true);
         }
-        // narrator
-        else
-        {
-            profileImage.SetActive(false);
-            audioSource = narratorSound;
-        }
-        
 
         // Update the name label
         nameText.GetComponent<TMPro.TMP_Text>().text = who;

@@ -261,3 +261,7 @@ MonoBehaviour:
   skillSuccess: 0
   stateRunning: 0
   moveSpeed: 200
+  downSprite: {fileID: -8668291868552471124, guid: 1eec4cfaa41860748b1a8a41d4f2b79f, type: 3}
+  upSprite: {fileID: 3077875745478163978, guid: b121068e5b7739a418615af9ea51911c, type: 3}
+  leftSprite: {fileID: -8668291868552471124, guid: 1eec4cfaa41860748b1a8a41d4f2b79f, type: 3}
+  rightSprite: {fileID: 3077875745478163978, guid: b121068e5b7739a418615af9ea51911c, type: 3}
