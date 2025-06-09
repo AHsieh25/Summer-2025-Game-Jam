@@ -32,7 +32,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 192, y: 192, z: 0}
-  m_LocalScale: {x: 16, y: 16, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -81,8 +81,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 8
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0.9433962, g: 0.6577339, b: 0, a: 1}
+  m_Sprite: {fileID: -5858822803793360457, guid: f03777ba82d4cbe409130f7f7d842c65, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -120,7 +120,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponName: 
-  stats: {fileID: 11400000, guid: 6473d625ca35436459ae63a31a7fe3eb, type: 2}
+  stats: {fileID: 11400000, guid: 004285a10f03d2c468560c4fae2929a5, type: 2}
+  gridManager: {fileID: 0}
   attackGrid: []
 --- !u!61 &959241400160838563
 BoxCollider2D:
@@ -159,8 +160,8 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
+    pivot: {x: 0.5, y: 0}
+    oldSize: {x: 20, y: 32}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -196,5 +197,11 @@ MonoBehaviour:
   currentState: 0
   movementPath: []
   attackTarget: {fileID: 0}
+  skillTarget: {fileID: 0}
+  skillSuccess: 0
   stateRunning: 0
   moveSpeed: 200
+  downSprite: {fileID: -5858822803793360457, guid: f03777ba82d4cbe409130f7f7d842c65, type: 3}
+  upSprite: {fileID: -2785329014500001903, guid: 012824b8f313d9d4b93a8f2dde5189e9, type: 3}
+  leftSprite: {fileID: 8461639407253907856, guid: 4a86be45b01380e43b56253cb77ccf0f, type: 3}
+  rightSprite: {fileID: 7203697991770227545, guid: 8fe3ff12e419d2340826b9d1cfc470c6, type: 3}

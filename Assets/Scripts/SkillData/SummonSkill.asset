@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0912c5c2df26edd4fb2d299f92f078bb, type: 3}
+  m_Name: SummonSkill
+  m_EditorClassIdentifier: 
+  skillName: Summon
+  manaCost: 50
+  chargeTurns: 3
+  currentCharge: 0
+  cooldownTurns: 5
+  currentCooldown: 0
+  goonPrefab: {fileID: 2704894647683399800, guid: 8e94dc73b5d9c6044acee7a4a5ff9ef3, type: 3}
+  spawnOffsets:
+  - {x: 1, y: 0}
+  - {x: -1, y: 0}

@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
 
     public PlayerMenu playerMenu;
     public AttackMenu attackMenu;
+    public SkillMenu skillMenu;
 
     private StatsUpdater stats;
     private CharacterStateMachine stateMachine;
@@ -23,7 +24,7 @@ public class PlayerController : MonoBehaviour
     private bool attacking = false;
     public int index;
 
-    void Awake()
+    void Awake() 
     {
         stateMachine = GetComponent<CharacterStateMachine>();
         stats = GetComponent<StatsUpdater>();
@@ -31,6 +32,40 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        // skill mode
+        if (playerMenu.UsingSkill && playerMenu.index == index)
+        {
+            // First frame entering skill mode?
+            if (!skillMenu.UsingSkill)
+            {
+                // Give the menu your stats so it can list the skills
+                skillMenu.Setup(stats);
+                gridManager.ResetAllGroundTileColors();
+            }
+
+            // If they hit “Back,” bail out and re-open the main menu
+            if (skillMenu.back)
+            {
+                skillMenu.Cancel();
+                playerMenu.UsingSkill = false;
+                playerMenu.gameObject.SetActive(true);
+                viewing = true;
+                return;
+            }
+
+            // If they haven’t chosen yet, just wait here
+            if (!skillMenu.done)
+                return;
+
+            // They clicked a skill button → perform it
+            int idx = skillMenu.selectedSkillIndex;
+            skillMenu.Cancel();
+            playerMenu.UsingSkill = false;
+            TryUseSkill(idx);
+            return;
+        }
+
+        // Attack mode
         if (playerMenu.Attacking && playerMenu.index == index)
         {
             if (!attacking)
@@ -45,7 +80,7 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        if (!playerMenu.gameObject.activeSelf && !playerMenu.Moving && !playerMenu.Attacking && viewing)
+        if (!playerMenu.gameObject.activeSelf && !playerMenu.Moving && !playerMenu.Attacking && !playerMenu.UsingSkill && viewing)
         {
             gridManager.ResetAllGroundTileColors();
             viewing = false;
@@ -109,6 +144,8 @@ public class PlayerController : MonoBehaviour
 
     private void TryMove(Vector2Int targetGrid)
     {
+        if (!stats.CanMove) return;
+
         Vector2Int startGrid = gridManager.GetGridPos(transform.position);
 
         List<Vector2Int> path = pathfinding.FindPath(startGrid, targetGrid);
@@ -131,6 +168,24 @@ public class PlayerController : MonoBehaviour
         hasMoved = true;
     }
 
+    private void TryUseSkill(int skillIdx)
+    {
+        // grab the SkillInstance
+        var inst = stats.Skills[skillIdx];
+        if (!inst.CanUse(stats))
+        {
+            Debug.Log("Not enough mana or skill on cooldown!");
+            // optionally re-open skillMenu here
+            return;
+        }
+
+        // enqueue on your state machine
+        stateMachine.currentSkill = inst;
+        stateMachine.currentState = CharacterState.UsingSkill;
+
+        // consume their action
+        hasMoved = true;
+    }
     private void TryAttack()
     {
         if (attackMenu.back)
@@ -140,7 +195,6 @@ public class PlayerController : MonoBehaviour
             playerMenu.gameObject.SetActive(true);
             viewing = false;
             attacking = false;
-            ViewMove();// maybe remove
             return; // maybe remove
         }
 

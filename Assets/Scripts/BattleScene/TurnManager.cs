@@ -15,6 +15,7 @@ public class TurnManager : MonoBehaviour
     private List<PlayerController> players = new List<PlayerController>();
     public string nextSceneName;
     public int player_actions = 3;
+    public bool skipPlayerActions = false;
 
     void Start()
     {
@@ -37,17 +38,29 @@ public class TurnManager : MonoBehaviour
     {
         while (true)
         {
+            if (SceneManager.GetActiveScene().name.Equals("Level2") && GameObject.FindGameObjectsWithTag("Player").Length == 0)
+            {
+                SceneManager.LoadScene(nextSceneName);
+            }
 
             // —— PLAYER TURN ——
+            skipPlayerActions = false;
             CurrentTurn.text = "Player Turn";
             for (int i = 0; i < player_actions; i++)
             {
+                if (skipPlayerActions)
+                    break;
                 Actions.text = "Actions: " + (player_actions - i).ToString();
                 foreach (var pc in players)
                 {
                     pc.hasMoved = false;
                 }
-                yield return new WaitUntil(() => players.Any(p => p.hasMoved));
+                yield return new WaitUntil(() => skipPlayerActions || players.Any(p => p.hasMoved));
+            }
+
+            foreach (Transform player in playerParent.transform)
+            {
+                player.GetComponent<StatsUpdater>().OnTurnEnd();
             }
 
             Actions.text = "Actions: 0";
@@ -64,8 +77,11 @@ public class TurnManager : MonoBehaviour
             Debug.Log("TurnManager: starting enemy turn");
             foreach (Transform enemy in enemyParent.transform)
             {
-                yield return StartCoroutine(enemy.gameObject.GetComponent<EnemyAI>().TakeTurnCoroutine());
+                yield return StartCoroutine(enemy.gameObject.GetComponent<EnemyAI>().TakeTurn());
+                yield return new WaitForSeconds(3f);
             }
+            foreach (Transform enemy in enemyParent.transform)
+                enemy.GetComponent<StatsUpdater>().OnTurnEnd();
             Debug.Log("TurnManager: enemy turn complete");
         }
     }

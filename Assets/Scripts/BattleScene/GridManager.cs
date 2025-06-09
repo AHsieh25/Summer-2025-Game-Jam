@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -6,19 +7,13 @@ public class GridManager : MonoBehaviour
 {
     public Tilemap ground;
     public Tilemap obstacles;
-
-    private HashSet<Vector2Int> occupiedCells = new HashSet<Vector2Int>();
-
-    public void SetOccupied(Vector2Int gridPos, bool occupied)
-    {
-        if (occupied) occupiedCells.Add(gridPos);
-        else occupiedCells.Remove(gridPos);
-    }
+    private Dictionary<Vector2Int, GameObject> unitMap = new Dictionary<Vector2Int, GameObject>();
 
     public bool IsOccupied(Vector2Int gridPos)
     {
-        return occupiedCells.Contains(gridPos);
+        return unitMap.ContainsKey(gridPos);
     }
+
     public void SetGroundTileColor(Vector2Int gridPos, Color color)
     { 
         Vector3Int cell = new Vector3Int(gridPos.x, gridPos.y, 0);
@@ -57,5 +52,22 @@ public class GridManager : MonoBehaviour
         Vector3Int worldPos = ground.WorldToCell(worldClick);
         Vector2Int gridPos = new Vector2Int(worldPos.x, worldPos.y);
         return gridPos;
+    }
+
+    public void RegisterUnit(Vector2Int gridPos, GameObject unit)
+    {
+        unitMap[gridPos] = unit;
+    }
+
+    public void UnregisterUnit(Vector2Int gridPos)
+    {
+        unitMap.Remove(gridPos);
+    }
+
+    public GameObject GetUnitAt(Vector2Int gridPos)
+    {
+        unitMap.TryGetValue(gridPos, out var unit);
+        Debug.Log("Value of unit: " + unit + " at " + gridPos);
+        return unit;
     }
 }

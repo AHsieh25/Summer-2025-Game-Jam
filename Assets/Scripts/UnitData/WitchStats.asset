@@ -9,11 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 89ac5ce490c110f4c8ffd16de37ac446, type: 3}
+  m_Script: {fileID: 11500000, guid: 3aa71e00a54696b419ba0e60f20091a0, type: 3}
   m_Name: WitchStats
   m_EditorClassIdentifier: 
   unitName: Witch
   maxHealth: 300
   moveDistance: 7
-  weaponType: 9
-  skills: []
+  weaponType: 7
+  maxMana: 300
+  skills:
+  - {fileID: 11400000, guid: 78b1f98260ef1504082e58f04571181a, type: 2}
+  - {fileID: 11400000, guid: 5cdd1613957f86341b23de54fdec61c3, type: 2}
+  - {fileID: 11400000, guid: 7df2cbcd87f724342ba3209d7a58896b, type: 2}
