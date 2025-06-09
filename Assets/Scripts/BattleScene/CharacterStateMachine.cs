@@ -143,11 +143,11 @@ public class CharacterStateMachine : MonoBehaviour
         {
             GetComponent<SpriteRenderer>().sprite = upSprite;
         }
-        else if (step.x > 0)
+        else if (step.x < 0)
         {
             GetComponent<SpriteRenderer>().sprite = rightSprite;
         }
-        else if (step.x < 0)
+        else if (step.x > 0)
         {
             GetComponent<SpriteRenderer>().sprite = leftSprite;
         }
